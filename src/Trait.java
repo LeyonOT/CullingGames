@@ -1,0 +1,3 @@
+public enum Trait {
+    STRONG, SMART, FAST, CHARISMATIC, LUCKY, TIRED
+}
