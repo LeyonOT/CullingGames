@@ -228,7 +228,7 @@ public class StaticActions {
             Item.MAP,
             Item.FOOD,
             true,
-            false);
+            true);
     public static final Action MAP_SEARCH_GUN = new Action(
             "$char$ uses their Map to find a Gun buried in ground under an old tree.",
             3,
