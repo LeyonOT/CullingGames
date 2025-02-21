@@ -29,16 +29,17 @@ public class Character {
         this.usedSlots = 0;
     }
     public void rest() {
-        this.tired = false;
+        tired = false;
     } //tylko uzywane w nocy
 
     public void reduceSaturation(int saturationCost) {
-        this.saturation -= saturationCost;
-        if (this.saturation < 40)
-            this.tired = true;
+        saturation -= saturationCost;
+        if (saturation < 40)
+            tired = true;
         else
-            this.tired = false;
-        System.out.println(name + (saturationCost>=0?" loses ":" gains ") + (saturationCost>=0?saturationCost:-saturationCost) + " saturation.");
+            tired = false;
+        //System.out.println(name + (saturationCost>=0?" loses ":" gains ") + (saturationCost>=0?saturationCost:-saturationCost) + " saturation.");
+        System.out.println("(" + (saturationCost>=0?"-":"+") + (saturationCost>=0?saturationCost:-saturationCost) + ") saturation.");
         if (this.saturation <=0) {
             alive = false;
             System.out.println(name + " has died of starvation.");
@@ -47,12 +48,16 @@ public class Character {
     }
 
     public void takeWound() {
-        if (this.wounded==false) {
+        if (!alive)
+            return;
+        if (!wounded) {
             System.out.println(name + " got wounded!");
-            this.wounded = true;
+            wounded = true;
         }
-        else
-            alive=false;
+        else {
+            alive = false;
+            System.out.println(name + " died from the damage they took!");
+        }
     }
 
     public void healWound() {
@@ -73,10 +78,13 @@ public class Character {
     }
 
     public void addItem(Item newItem) {
+        boolean wasAdded = false;
+
         if (usedSlots + newItem.getSlotSize() <= maxSlots) {
             equipment.add(newItem);
-            usedSlots+= newItem.getSlotSize();
+            usedSlots += newItem.getSlotSize();
             System.out.println(name + " added " + newItem.getName() + " to their equipment.");
+            wasAdded = true;
         } else {
             sortEquipmentByPriority();
             ArrayList<Item> indexesToRemove = new ArrayList<>();
@@ -85,11 +93,12 @@ public class Character {
             for (int i = 0; i < equipment.size(); i++) {
                 if (newItem.getPriority() > equipment.get(i).getPriority()) {
                     if (newItem.getSlotSize() <= equipment.get(i).getSlotSize()) {
-                        System.out.println(name + " threw away " + equipment.get(i).getName() + " to get " + newItem.getName()+".");
+                        System.out.println(name + " threw away " + equipment.get(i).getName() + " to get " + newItem.getName() + ".");
+                        wasAdded = true;
                         equipment.remove(i);
                         usedSlots -= equipment.get(i).getSlotSize();
                         equipment.add(newItem);
-                        usedSlots+= newItem.getSlotSize();
+                        usedSlots += newItem.getSlotSize();
                         break;
                     } else {
                         indexesToRemove.add(equipment.get(i));
@@ -105,10 +114,11 @@ public class Character {
                                 equipment.remove(item);
                                 usedSlots -= item.getSlotSize();
                             }
-                            s.deleteCharAt(s.length()-2);
+                            s.deleteCharAt(s.length() - 2);
                             s.append("to get ").append(newItem.getName()).append(".");
+                            wasAdded = true;
                             equipment.add(newItem);
-                            usedSlots+= newItem.getSlotSize();
+                            usedSlots += newItem.getSlotSize();
                             System.out.println(s);
                             break;
                         }
@@ -117,6 +127,9 @@ public class Character {
             }
         }
         sortEquipmentByPriority();
+        if (!wasAdded) {
+            System.out.println(name + " could not add " + newItem.getName() + " to their equipment.");
+        }
     }
 
     public boolean removeItem(Item item) {
@@ -188,7 +201,7 @@ public class Character {
     }
     public void printStatus() {
         System.out.println(name + " (" + gender + ") | Sat: " + saturation + " | Trait: " + getTrait() + "\n" +
-                            "Team: " + team + "\n" +
-                            showEquipment());
+                "Team: " + team + "\n" +
+                showEquipment());
     }
 }

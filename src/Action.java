@@ -32,13 +32,9 @@ public class Action {
     }
     protected void applyEffects(Character character) {
         character.reduceSaturation(saturationCost);
-        if (consumedItem)
-            character.removeItem(requiredItem);
-        if (applyWound)
-            character.takeWound();
-        if (rewardItem == null)
-            return;
-        character.addItem(rewardItem);
+        if (consumedItem) character.removeItem(requiredItem);
+        if (rewardItem != null) character.addItem(rewardItem);
+        if (applyWound) character.takeWound();
     }
 }
 

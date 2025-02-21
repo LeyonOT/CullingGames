@@ -21,8 +21,8 @@ public class LongActions {
         character.reduceSaturation(18);
     }).withCriticalLoss(character -> {
         System.out.println(character.getName() + " catches on a sharp branch while trying to get over the log and wounds their leg.");
-        character.takeWound();
         character.reduceSaturation(23);
+        character.takeWound();
     }).build();
 
     public static final LongAction RIVER_CROSSING = new LongAction.Builder(
@@ -53,17 +53,27 @@ public class LongActions {
         action.addTraitModifier(Trait.STRONG, 1);
         action.addTraitModifier(Trait.FAST, 1);
         action.addItemModifier(Item.ROPE, 2);
+        action.addItemModifier(Item.LADDER, 4);
     }).withWinEffects(character -> {
-        int satReduction = character.hasItem(Item.ROPE) ? 10 : 0;
-        if (character.hasItem(Item.ROPE)) System.out.print(" using a rope");
+        int satReduction = 0;
+        if (character.hasItem(Item.LADDER)) {
+            satReduction = 15;
+            System.out.print(" using a ladder");
+        }
+        else if (character.hasItem(Item.ROPE)) {
+            satReduction = 10;
+            System.out.print(" using a rope");
+        }
         System.out.print(" and finds");
         if (character.getTrait() == Trait.LUCKY) {
             System.out.println(" two ripe fruits.");
+            if (character.hasItem(Item.ROPE)) character.removeItem(Item.ROPE);
             character.addItem(Item.FOOD);
             character.reduceSaturation(-10);
         }
         else {
             System.out.println(" a ripe fruit.");
+            if (character.hasItem(Item.ROPE)) character.removeItem(Item.ROPE);
             character.addItem(Item.FOOD);
             character.reduceSaturation(15-satReduction);
         }
@@ -71,8 +81,8 @@ public class LongActions {
         character.reduceSaturation(15);
     }).withCriticalLoss(character -> {
         System.out.println(character.getName() + " falls from the tree and breaks their arm.");
-        character.takeWound();
         character.reduceSaturation(15);
+        character.takeWound();
     }).build();
 
     public static final LongAction FIND_TREASURE_1 = new LongAction.Builder(
@@ -120,7 +130,6 @@ public class LongActions {
     ).withModifiers(action -> {
         action.addTraitModifier(Trait.LUCKY, 3);
     }).withWinEffects(character -> {
-        character.removeItem(Item.MAP);
         Random random = new Random();
         int reward = random.nextInt(10) + 1;
         reward = character.getTrait().equals(Trait.LUCKY) ? reward+2 : reward;
@@ -128,14 +137,17 @@ public class LongActions {
         switch (reward) {
             case 10:
                 System.out.println(" a shield.");
+                character.removeItem(Item.MAP);
                 character.addItem(Item.SHIELD);
                 break;
             case 4,5,6,7,8,9:
                 System.out.println(" a helmet.");
+                character.removeItem(Item.MAP);
                 character.addItem(Item.HELMET);
                 break;
             case 1,2,3:
                 System.out.println(" a rock.");
+                character.removeItem(Item.MAP);
                 character.addItem(Item.ROCK);
                 break;
         }
@@ -184,4 +196,6 @@ public class LongActions {
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(0);
     }).build();
+
+
 }

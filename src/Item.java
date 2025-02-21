@@ -31,22 +31,34 @@ public class Item {
         return name + " (" + slotSize + " slots)";
     }
 
-
+    public static Item findItem(String name) {
+        if (name.toLowerCase().startsWith("random")) {
+            return randomItem(Integer.parseInt(name.substring(6)));
+        }
+        for (Item item : listOfItems) {
+            if (item.getName().equalsIgnoreCase(name)) {
+                return item;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
 
     //Declarations
-    public static Item RANDOM = new Item("Random", 0, 0);
+    public static Item RANDOM = new Item("Random", 0, 0); //RANDOM FOR CHARACTER EQUIPMENT
     public static Item TORCH = new Item("Torch", 1, 2);
 
     static {
         listOfItems.add(TORCH);
     }
 
+    //Implementation TODO
     public static Item COMPASS = new Item("Compass", 1, 1);
 
     static {
         listOfItems.add(COMPASS);
     }
 
+    //Implementation TODO
     public static Item SLEEPING_BAG = new Item("Sleeping Bag", 2, 2);
 
     static {
@@ -126,6 +138,7 @@ public class Item {
     }
 
 
+    //RANDOM FOR RANDOM ITEM FROM THE LIST OF SAID PRIORITY
     public static Item randomItem(int maxPriority) {
         Random random = new Random();
         int currentRange = listOfItems.size();
