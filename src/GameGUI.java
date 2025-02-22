@@ -1,3 +1,4 @@
+import com.formdev.flatlaf.FlatDarkLaf;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -84,6 +85,14 @@ public class GameGUI extends JFrame {
     }
 
     public static void main(String[] args) {
+
+        try {
+            UIManager.setLookAndFeel( new FlatDarkLaf() );
+        } catch( Exception ex ) {
+            System.err.println( "Failed to initialize LaF" );
+        }
+
+
         try {
             // Tworzymy pipedstreamy, do pos pisze GUI, a pis zastąpuje System.in
             PipedOutputStream pos = new PipedOutputStream();
