@@ -1,3 +1,5 @@
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class LongActions {
@@ -15,12 +17,12 @@ public class LongActions {
         action.addTraitModifier(Trait.LUCKY, 1);
         action.addItemModifier(Item.AXE, 4);
     }).withWinEffects(character -> {
-        System.out.println((character.hasItem(Item.AXE)?" by cutting it in half with their Axe.":"."));
+        System.out.println((character.hasItem(Item.AXE)?" by cutting it in half with "+character.getPron(true)+" Axe.":"."));
         character.reduceSaturation(5);
     }).withLoseEffects(character -> {
         character.reduceSaturation(18);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getName() + " catches on a sharp branch while trying to get over the log and wounds their leg.");
+        System.out.println(character.getName() + " catches on a sharp branch while trying to get over the log and wounds "+character.getPron(true)+" leg.");
         character.reduceSaturation(23);
         character.takeWound();
     }).build();
@@ -58,11 +60,11 @@ public class LongActions {
         int satReduction = 0;
         if (character.hasItem(Item.LADDER)) {
             satReduction = 15;
-            System.out.print(" using a ladder");
+            System.out.print(" using a Ladder");
         }
         else if (character.hasItem(Item.ROPE)) {
             satReduction = 10;
-            System.out.print(" using a rope");
+            System.out.print(" using a Rope");
         }
         System.out.print(" and finds");
         if (character.getTrait() == Trait.LUCKY) {
@@ -80,7 +82,7 @@ public class LongActions {
     }).withLoseEffects(character -> {
         character.reduceSaturation(15);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getName() + " falls from the tree and breaks their arm.");
+        System.out.println(character.getName() + " falls from the tree and breaks "+character.getPron(true)+" arm.");
         character.reduceSaturation(15);
         character.takeWound();
     }).build();
@@ -99,15 +101,15 @@ public class LongActions {
         reward = Math.min(10, reward);
         switch (reward) {
             case 10:
-                System.out.println(" a sword.");
+                System.out.println(" a Sword.");
                 character.addItem(Item.SWORD);
                 break;
             case 4,5,6,7,8,9:
-                System.out.println(" a rope.");
+                System.out.println(" a Rope.");
                 character.addItem(Item.ROPE);
                 break;
             case 1,2,3:
-                System.out.println(" a rock.");
+                System.out.println(" a Rock.");
                 character.addItem(Item.ROCK);
                 break;
         }
@@ -115,13 +117,13 @@ public class LongActions {
     }).withLoseEffects(character -> {
         character.reduceSaturation(5);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getName() + " puts one of their items in it and forgets to take it back.");
+        System.out.println(character.getName() + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(0);
     }).build();
 
     public static final LongAction FIND_TREASURE_2 = new LongAction.Builder(
-            "$char$ uses their map to find a hidden treasure chest.",
+            "$char$ uses $pronoun2$ Map to find a hidden treasure chest.",
             "$char$ opens the chest and finds",
             "$char$ opens the chest but it's empty.",
             6
@@ -136,17 +138,17 @@ public class LongActions {
         reward = Math.min(10, reward);
         switch (reward) {
             case 10:
-                System.out.println(" a shield.");
+                System.out.println(" a Shield.");
                 character.removeItem(Item.MAP);
                 character.addItem(Item.SHIELD);
                 break;
             case 4,5,6,7,8,9:
-                System.out.println(" a helmet.");
+                System.out.println(" a Helmet.");
                 character.removeItem(Item.MAP);
                 character.addItem(Item.HELMET);
                 break;
             case 1,2,3:
-                System.out.println(" a rock.");
+                System.out.println(" a Rock.");
                 character.removeItem(Item.MAP);
                 character.addItem(Item.ROCK);
                 break;
@@ -157,7 +159,7 @@ public class LongActions {
         character.reduceSaturation(5);
     }).withCriticalLoss(character -> {
         character.removeItem(Item.MAP);
-        System.out.println(character.getName() + " puts one of their items in it and forgets to take it back.");
+        System.out.println(character.getName() + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(0);
     }).build();
@@ -176,15 +178,15 @@ public class LongActions {
         reward = Math.min(10, reward);
         switch (reward) {
             case 10:
-                System.out.println(" a gun.");
+                System.out.println(" a Gun.");
                 character.addItem(Item.GUN);
                 break;
             case 4,5,6,7,8,9:
-                System.out.println(" a compass.");
+                System.out.println(" a Compass.");
                 character.addItem(Item.COMPASS);
                 break;
             case 1,2,3:
-                System.out.println(" a rock.");
+                System.out.println(" a Rock.");
                 character.addItem(Item.ROCK);
                 break;
         }
@@ -192,9 +194,59 @@ public class LongActions {
     }).withLoseEffects(character -> {
         character.reduceSaturation(5);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getName() + " puts one of their items in it and forgets to take it back.");
+        System.out.println(character.getName() + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(0);
+    }).build();
+
+    public static final LongAction BEAR_ATTACK = new LongAction.Builder(
+            "$char$ gets suddenly attacked by a bear.",
+            "$char$ wins without severe injuries by",
+            "$char$ somehow escapes after long struggle and few wounds.",
+            10
+    ).withModifiers(action -> {
+        action.addTraitModifier(Trait.STRONG, 1);
+        action.addTraitModifier(Trait.FAST, 1);
+        action.addTraitModifier(Trait.SMART, 1);
+
+        action.addHighestItemModifier(Item.GUN, 3, 1);
+        action.addHighestItemModifier(Item.SWORD, 2, 1);
+        action.addHighestItemModifier(Item.AXE, 1, 1);
+
+        action.addItemModifier(Item.SHIELD, 2);
+        action.addItemModifier(Item.HELMET, 1);
+        action.addItemModifier(Item.TORCH, 1);
+    }).withWinEffects(character -> {
+        Map<Item, String> winDescriptions = new HashMap<>();
+        winDescriptions.put(Item.GUN, " shoot the bear with a Gun");
+        winDescriptions.put(Item.SWORD, " slaying the bear with a Sword");
+        winDescriptions.put(Item.AXE, " fighting off the bear with an Axe");
+
+        boolean itemUsed = false;
+        for (Map.Entry<Item, String> entry : winDescriptions.entrySet()) {
+            if (character.hasItem(entry.getKey())) {
+                System.out.print(entry.getValue());
+                itemUsed = true;
+                break;
+            }
+        }
+
+        if (!itemUsed) System.out.print(" defeating the bear with "+character.getPron(true)+" bare hands");
+
+        if (character.hasItem(Item.SHIELD)) {
+            System.out.println(", but "+character.getPron(true)+" Shield gets broken in the process.");
+        } else System.out.println(".");
+
+        character.addItem(Item.FOOD);
+        character.addItem(Item.FOOD);
+        character.reduceSaturation(18);
+    }).withLoseEffects(character -> {
+        character.reduceSaturation(31);
+        character.takeWound();
+    }).withCriticalLoss(character -> {
+        System.out.println(character.getName() + "gets mauled to death by the Bear before "+character.getPron(false)+" can even react.");
+        character.takeWound();
+        character.takeWound();
     }).build();
 
 

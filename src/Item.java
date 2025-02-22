@@ -45,7 +45,7 @@ public class Item {
 
     //Declarations
     public static Item RANDOM = new Item("Random", 0, 0); //RANDOM FOR CHARACTER EQUIPMENT
-    public static Item TORCH = new Item("Torch", 1, 2);
+    public static Item TORCH = new Item("Torch", 1, 1);
 
     static {
         listOfItems.add(TORCH);
@@ -59,25 +59,25 @@ public class Item {
     }
 
     //Implementation TODO
-    public static Item SLEEPING_BAG = new Item("Sleeping Bag", 2, 2);
+    public static Item SLEEPING_BAG = new Item("Sleeping Bag", 2, 1);
 
     static {
         listOfItems.add(SLEEPING_BAG);
     }
 
-    public static Item LADDER = new Item("Ladder", 2, 2);
+    public static Item LADDER = new Item("Ladder", 2, 3);
 
     static {
         listOfItems.add(LADDER);
     }
 
-    public static Item ROPE = new Item("Rope", 1, 1);
+    public static Item ROPE = new Item("Rope", 1, 2);
 
     static {
         listOfItems.add(ROPE);
     }
 
-    public static Item MAP = new Item("Map", 1, 2);
+    public static Item MAP = new Item("Map", 1, 4);
 
     static {
         listOfItems.add(MAP);
@@ -89,49 +89,49 @@ public class Item {
         listOfItems.add(ROCK);
     }
 
-    public static Item SWORD = new Item("Sword", 1, 2);
+    public static Item SWORD = new Item("Sword", 1, 4);
 
     static {
         listOfItems.add(SWORD);
     }
 
-    public static Item AXE = new Item("Axe", 2, 2);
+    public static Item AXE = new Item("Axe", 2, 3);
 
     static {
         listOfItems.add(AXE);
     }
 
-    public static Item HAMMER = new Item("Hammer", 1, 1);
+    public static Item HAMMER = new Item("Hammer", 1, 2);
 
     static {
         listOfItems.add(HAMMER);
     }
 
-    public static Item HELMET = new Item("Helmet", 1, 2);
+    public static Item HELMET = new Item("Helmet", 1, 3);
 
     static {
         listOfItems.add(HELMET);
     }
 
-    public static Item SHIELD = new Item("Shield", 2, 3);
+    public static Item SHIELD = new Item("Shield", 2, 4);
 
     static {
         listOfItems.add(SHIELD);
     }
 
-    public static Item GUN = new Item("Gun", 1, 4);
+    public static Item GUN = new Item("Gun", 1, 5);
 
     static {
         listOfItems.add(GUN);
     }
 
-    public static Item BOW = new Item("Bow", 2, 2);
+    public static Item BOW = new Item("Bow", 2, 3);
 
     static {
         listOfItems.add(BOW);
     }
 
-    public static Item FOOD = new Item("Food", 1, 3);
+    public static Item FOOD = new Item("Food", 1, 4);
 
     static {
         listOfItems.add(FOOD);

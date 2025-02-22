@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Game {
     private List<Character> characters;
@@ -9,6 +6,7 @@ public class Game {
     private List<Action> actions;
     private int dayCount;
     private Scanner scanner;
+    private Map<Action, Integer> actionRecency;
 
     public Game(List<Action> actions) {
         this.characters = new ArrayList<>();
@@ -16,6 +14,11 @@ public class Game {
         this.scanner = new Scanner(System.in);
         this.teams = new ArrayList<>();
         this.actions = actions;
+        this.actionRecency = new HashMap<>();
+
+        for (Action action : actions) {
+            actionRecency.put(action, 100);
+        }
     }
 
     public void setupCharacters() {
@@ -168,6 +171,7 @@ public class Game {
     public void assignRandomAction(Character character) {
         Random random = new Random();
         int currentRange = actions.size();
+        int actionMercy = 0;
         List<Action> tempAction = new ArrayList<>(actions);
 
         while (currentRange > 0) {
@@ -175,8 +179,25 @@ public class Game {
             Action selectedAction = tempAction.get(actionIndex);
 
             if (selectedAction.isAccessible(character)) {
-                selectedAction.perform(character);
-                return;
+                int recency = actionRecency.get(selectedAction);
+                if (actionMercy > characters.size()){
+                    selectedAction.perform(character);
+                    actionRecency.put(selectedAction, Math.max(1, recency / 3));
+                    updateRecency(selectedAction);
+                    return;
+                }
+
+                if (random.nextInt(100) < recency) {
+                    selectedAction.perform(character);
+                    actionRecency.put(selectedAction, Math.max(1, recency / 3));
+                    updateRecency(selectedAction);
+                    return;
+                } else {
+                    actionRecency.put(selectedAction, Math.min(100, recency * 2));
+                    currentRange--;
+                    actionMercy++;
+                    tempAction.set(actionIndex, tempAction.get(currentRange));
+                }
             } else {
                 //replacing the action
                 currentRange--;
@@ -185,7 +206,13 @@ public class Game {
         }
         System.out.println(character.getName() + " could not find an accessible action.");
     }
-
+    private void updateRecency(Action selectedAction) {
+        for (Map.Entry<Action, Integer> entry : actionRecency.entrySet()) {
+            if(entry.getKey() != selectedAction){
+                actionRecency.put(entry.getKey(), Math.min(100, entry.getValue() + 5));
+            }
+        }
+    }
 
     private void playDayCycle() {
         Random random = new Random();
@@ -239,7 +266,7 @@ public class Game {
 
     //SPECIAL ACTIONS
     private void stabilizeWound(Character character) {
-        System.out.println(character.getName() + " uses a Rope to stabilize their wound.");
+        System.out.println(character.getName() + " uses a Rope to stabilize "+character.getPron(true)+" wound.");
         character.healWound();
         character.removeItem(Item.ROPE);
         character.reduceSaturation(10);
@@ -250,5 +277,10 @@ public class Game {
         System.out.println(character.getName() + " takes a break to eat some Food");
         character.reduceSaturation(-saturationRestored);
         character.removeItem(Item.FOOD);
+    }
+
+    //GETTERS
+    public Map<Action, Integer> getActionRecency() {
+        return actionRecency;
     }
 }

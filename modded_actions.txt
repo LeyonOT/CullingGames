@@ -1,2 +1,2 @@
 -- TEST
-ROPE_TANGLE "$char$ gets accidentally tangled in their own Rope, falls to the ground and hurts themselves" 15 ROPE null true true
+ROPE_TANGLE "$char$ gets accidentally tangled in $pronoun2$ own Rope, falls to the ground and gets hurt." 15 ROPE null true true

@@ -56,7 +56,7 @@ public class Character {
         }
         else {
             alive = false;
-            System.out.println(name + " died from the damage they took!");
+            System.out.println(name + " died from the damage "+getPron(false)+" took!");
         }
     }
 
@@ -83,7 +83,7 @@ public class Character {
         if (usedSlots + newItem.getSlotSize() <= maxSlots) {
             equipment.add(newItem);
             usedSlots += newItem.getSlotSize();
-            System.out.println(name + " added " + newItem.getName() + " to their equipment.");
+            System.out.println(name + " added " + newItem.getName() + " to "+getPron(true)+" equipment.");
             wasAdded = true;
         } else {
             sortEquipmentByPriority();
@@ -128,7 +128,7 @@ public class Character {
         }
         sortEquipmentByPriority();
         if (!wasAdded) {
-            System.out.println(name + " could not add " + newItem.getName() + " to their equipment.");
+            System.out.println(name + " could not add " + newItem.getName() + " to "+getPron(true)+" equipment.");
         }
     }
 
@@ -143,7 +143,7 @@ public class Character {
                 Item randomItem = equipment.get(randomIndex);
                 equipment.remove(randomItem);
                 usedSlots -= randomItem.getSlotSize();
-                System.out.println(name + " lost " + randomItem.getName() + " from their equipment.");
+                System.out.println(name + " lost " + randomItem.getName() + " from "+getPron(true)+" equipment.");
                 return true;
             }
         }
@@ -151,10 +151,10 @@ public class Character {
         if (equipment.contains(item)) {
             equipment.remove(item);
             usedSlots -= item.getSlotSize();
-            System.out.println(name + " removed " + item.getName() + " from their equipment.");
+            System.out.println(name + " removed " + item.getName() + " from "+getPron(true)+" equipment.");
             return true;
         } else {
-            System.out.println(name + " does not have " + item.getName() + " in their equipment.");
+            System.out.println(name + " does not have " + item.getName() + " in "+getPron(true)+" equipment.");
             return false;
         }
     }
@@ -203,5 +203,11 @@ public class Character {
         System.out.println(name + " (" + gender + ") | Sat: " + saturation + " | Trait: " + getTrait() + "\n" +
                 "Team: " + team + "\n" +
                 showEquipment());
+    }
+
+    public String getPron(boolean b) {
+        if (b)
+            return gender.equals("Male")?"his":"her";
+        return gender.equals("Male")?"he":"she";
     }
 }

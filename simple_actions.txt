@@ -13,21 +13,21 @@ STONE_THROWING "$char$ finds a smooth stone and spends some time practicing thro
 CRY "$char$ breaks down crying." 8 null null false false
 PARANOID "$char$ thinks someone is following them and hides behind some bushes." 1 null null false false
 RUN "$char$ takes a jog around the field but finds nothing." 10 null null false false
-STRETCH "$char$ stretches their muscles to keep them in shape." 5 null null false false
+STRETCH "$char$ stretches $pronoun2$ muscles to keep them in shape." 5 null null false false
 FIND_BERRIES "$char$ finds some berries and eats them." -10 null null false false
-SING "$char$ sings a song to keep their spirits up." 2 null null false false
+SING "$char$ sings a song to keep $pronoun2$ spirits up." 2 null null false false
 FIDGET "$char$ fidgets nervously due to anxiety." 1 null null false false
-REMEMBER_HOME "$char$ recalls memories of their past life, trying to maintain hope." 1 null null false false
+REMEMBER_HOME "$char$ recalls memories of $pronoun2$ past life, trying to maintain hope." 1 null null false false
 CLIMB_CLIFF "$char$ scales a rocky cliff face, hoping to gain a better vantage point." 12 null null false false
-FALL_CLIFF "$char$ loses their footing and falls a short distance down a cliff face." 10 null null false true
-SNAKE_BITE "$char$ suddenly gets bitten by a nearby snake." 15 null null false true
-BREAK_ARM "$char$ falls down and breaks their fall with their arm." 10 null null false true
+FALL_CLIFF "$char$ loses $pronoun2$ footing and falls a short distance down a cliff face." 10 null null false true
+SNAKE_BITE "$char$ gets suddenly bitten by a nearby snake." 15 null null false true
+BREAK_ARM "$char$ falls down and breaks the fall with $pronoun2$ arm." 10 null null false true
 
 -- FIND ACTIONS
 
 FIND_MAP_1 "$char$ stumbles upon a Map hidden in some rubble." 1 null MAP false false
 FIND_MAP_2 "$char$ picks up an old, dusty book from the ground and finds a Map between its pages." 1 null MAP false false
-FIND_MAP_3 "$char$ draws a Map based on a dream he had some time ago." 1 null MAP false false
+FIND_MAP_3 "$char$ draws a Map based on a dream $pronoun1$ had some time ago." 1 null MAP false false
 FIND_ROPE_1 "$char$ stumbles upon a Rope hidden in some rubble." 2 null ROPE false false
 FIND_ROPE_2 "$char$ finds an abandoned building and decides to take a Rope off of it's entrance." 2 null ROPE false false
 FIND_TORCH_1 "$char$ finds an unlit Torch on the side of some wall." 2 null TORCH false false
@@ -36,43 +36,43 @@ FIND_HAMMER_1 "$char$ finds a Hammer in some abandoned toolbox." 4 null HAMMER f
 
 -- CRAFT ACTIONS
 
-CRAFT_ROPE_1 "$char$ rips off their torn clothes to make a Rope with." 5 null ROPE false false
+CRAFT_ROPE_1 "$char$ rips off $pronoun2$ torn clothes to make a Rope with." 5 null ROPE false false
 CRAFT_ROPE_2 "$char$ finds some sturdy grass and picks it to make a Rope with." 5 null ROPE false false
-CRAFT_TORCH_1 "$char$ finds a stick and uses their torn clothes to make a Torch out of them." 5 null TORCH false false
+CRAFT_TORCH_1 "$char$ finds a stick and uses $pronoun2$ torn clothes to make a Torch out of them." 5 null TORCH false false
 CRAFT_TORCH_2 "$char$ finds a stick and uses some grass to make a Torch out of them." 8 null TORCH false false
-SHIELD_CRAFT "$char$ uses their insane genius, few loose wooden boards they found and a Rope to craft a shield." 4 ROPE SHIELD true false
-HAMMER_CRAFT "$char$ combines their conveniently shaped Rock with a nearby stick to create a Hammer!" 10 ROCK HAMMER true false
-LADDER_CRAFT "$char$ puts their carpentry skills to use and with the help of their Hammer, they build a Ladder!" 15 HAMMER LADDER false false
+SHIELD_CRAFT "$char$ uses $pronoun2$ insane genius, few loose wooden boards $pronoun1$ found and a Rope to craft a Shield." 4 ROPE SHIELD true false
+HAMMER_CRAFT "$char$ combines $pronoun2$ conveniently shaped Rock with a nearby stick to create a Hammer!" 10 ROCK HAMMER true false
+LADDER_CRAFT "$char$ puts $pronoun2$ carpentry skills to use and with the help of $pronoun2$ Hammer, $pronoun2$ builds a Ladder!" 15 HAMMER LADDER false false
 
 -- ROPE ACTIONS
 
-TREE_CLIMB "$char$ uses a makeshift rope to climb a tree, scanning the area for potential dangers." 4 ROPE null true false
+TREE_CLIMB "$char$ uses a Rope to climb a tree, scanning the area for potential dangers." 4 ROPE null true false
 
 
 -- TORCH ACTIONS
 
-TORCH_LIGHT "$char$ lights a torch and uses it to illuminate the area, searching for hidden dangers." 3 TORCH null true false
-TORCH_FIRE_1 "$char$ lights a torch and uses it to start a campfire, cooking up a nearby squirrel and eating it." -20 TORCH null true false
-TORCH_FIRE_2 "$char$ lights a torch and tries to start a campfire, but accidentally catches themselves on fire." 15 TORCH null true true
-TORCH_CAVE_1 "$char$ lights a torch and uses it to explore a dark cave, finding a hidden chest with some loot inside." 5 TORCH RANDOM2 true false
-TORCH_CAVE_2 "$char$ lights a torch and uses it to explore a dark cave, but gets lost for some hours." 10 TORCH null true false
+TORCH_LIGHT "$char$ lights a Torch and uses it to illuminate the area, searching for hidden dangers." 3 TORCH null true false
+TORCH_FIRE_1 "$char$ lights a Torch and uses it to start a campfire, cooking up a nearby squirrel and eating it." -20 TORCH null true false
+TORCH_FIRE_2 "$char$ lights a Torch and tries to start a campfire, but accidentally catches themselves on fire." 15 TORCH null true true
+TORCH_CAVE_1 "$char$ lights a Torch and uses it to explore a dark cave, finding a hidden chest with some loot inside." 5 TORCH RANDOM3 true false
+TORCH_CAVE_2 "$char$ lights a Torch and uses it to explore a dark cave, but gets lost for some hours." 10 TORCH null true false
 
 -- MAP ACTIONS
 
-MAP_SEARCH_FOOD "$char$ uses their Map to find a camp with some leftovers." 4 MAP FOOD true false
-MAP_SEARCH_CHEST "$char$ uses their Map to find a chest buried under some sand and mud." 7 MAP RANDOM4 true false
-MAP_SEARCH_RUINS "$char$ uses their Map to find lost ruins with some loot in them." 8 MAP RANDOM4 true false
-MAP_SEARCH_FOOD_2 "$char$ uses their Map to find what looks like an abandoned altar with some offerings still on it." 4 MAP FOOD true false
-MAP_SEARCH_GUN "$char$ uses their Map to find a Gun buried in ground under an old tree." 3 MAP GUN true false
+MAP_SEARCH_FOOD "$char$ uses $pronoun2$ Map to find a camp with some leftovers." 4 MAP FOOD true false
+MAP_SEARCH_CHEST "$char$ uses $pronoun2$ Map to find a chest buried under some sand and mud." 7 MAP RANDOM5 true false
+MAP_SEARCH_RUINS "$char$ uses $pronoun2$ Map to find lost ruins with some loot in them." 8 MAP RANDOM5 true false
+MAP_SEARCH_FOOD_2 "$char$ uses $pronoun2$ Map to find what looks like an abandoned altar with some offerings still on it." 4 MAP FOOD true false
+MAP_SEARCH_GUN "$char$ uses $pronoun2$ Map to find a Gun buried in ground under an old tree." 3 MAP GUN true false
 
 -- ROCK ACTIONS
 
-ROCK_THROW_1 "$char$ throws their Rock at a nearby bunny, killing it instantly." 6 ROCK FOOD true false
-ROCK_THROW_2 "$char$ throws their Rock at a nearby bunny, but misses." 6 ROCK null true false
+ROCK_THROW_1 "$char$ throws $pronoun2$ Rock at a nearby bunny, killing it instantly." 6 ROCK FOOD true false
+ROCK_THROW_2 "$char$ throws $pronoun2$ Rock at a nearby bunny, but misses." 6 ROCK null true false
 
 -- BOW ACTIONS
 
-BOW_SHOOT_1 "$char$ shoots from their bow, aiming at a nearby squirrel, killing it instantly" 12 BOW FOOD false false
-BOW_SHOOT_2 "$char$ shoots from their bow, aiming at a nearby bunny, killing it instantly" 12 BOW FOOD false false
-BOW_SHOOT_3 "$char$ shoots from their bow, aiming at a nearby squirrel, but misses" 12 BOW FOOD false false
-BOW_SHOOT_4 "$char$ shoots from their bow, aiming at a nearby deer, killing it instantly" 12 BOW FOOD false false
+BOW_SHOOT_1 "$char$ shoots from $pronoun2$ Bow, aiming at a nearby squirrel, killing it instantly" 12 BOW FOOD false false
+BOW_SHOOT_2 "$char$ shoots from $pronoun2$ Bow, aiming at a nearby bunny, killing it instantly" 12 BOW FOOD false false
+BOW_SHOOT_3 "$char$ shoots from $pronoun2$ Bow, aiming at a nearby squirrel, but misses" 12 BOW FOOD false false
+BOW_SHOOT_4 "$char$ shoots from $pronoun2$ Bow, aiming at a nearby deer, killing it instantly" 12 BOW FOOD false false

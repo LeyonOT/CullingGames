@@ -23,7 +23,7 @@ public class Action {
     public void perform(Character character) {
         if (isAccessible(character)) {
             System.out.println();
-            System.out.println(description.replace("$char$", character.getName()));
+            System.out.println(replaceVal(description, character));
             applyEffects(character);
             System.out.println();
         } else { //nie powinno si enigdy pojawic
@@ -36,6 +36,12 @@ public class Action {
         if (rewardItem != null) character.addItem(rewardItem);
         if (applyWound) character.takeWound();
     }
+
+    protected String replaceVal(String s, Character c) {
+        return s.replace("$char$", c.getName())
+                .replace("$pronoun2$", c.getPron(true))
+                .replace("$pronoun1$", c.getPron(false));
+    }
 }
 
 class LongAction extends Action {
@@ -47,6 +53,7 @@ class LongAction extends Action {
     private final EffectApplier criticalLoss;
     private Map<Trait, Integer> traitModifiers;
     private Map<Item, Integer> itemModifiers;
+    private Map<Integer, Map<Item, Integer>> highestItemModifiers;
 
     public LongAction(String description, String winDesc, String loseDesc, int baseDifficulty, Item requiredItem, EffectApplier winEffectApplier, EffectApplier loseEffectApplier, EffectApplier criticalLoss) {
         super(description, 0, requiredItem, null, false, false);
@@ -60,6 +67,7 @@ class LongAction extends Action {
 
         this.traitModifiers = new HashMap<>();
         this.itemModifiers = new HashMap<>();
+        this.highestItemModifiers = new HashMap<>();
         this.maleMod = 0;
         this.femaleMod = 0;
     }
@@ -138,7 +146,7 @@ class LongAction extends Action {
         int result = roll + modifier;
 
         System.out.println();
-        System.out.println(description.replace("$char$", character.getName()));
+        System.out.println(replaceVal(description, character));
         System.out.println("Roll: " + roll + ", Modifier: " + modifier + ", Total: " + result + " | Difficulty: " + baseDifficulty);
 
         if (roll == 0) {
@@ -148,10 +156,10 @@ class LongAction extends Action {
         }
 
         if (result >= baseDifficulty) {
-            System.out.print(winDesc.replace("$char$", character.getName()));
+            System.out.print(replaceVal(winDesc, character));
             winEffectApplier.apply(character);
         } else {
-            System.out.println(loseDesc.replace("$char$", character.getName()));
+            System.out.println(replaceVal(loseDesc, character));
             loseEffectApplier.apply(character);
         }
     }
@@ -162,6 +170,9 @@ class LongAction extends Action {
 
     public void addItemModifier(Item item, int modifier) {
         itemModifiers.put(item, modifier);
+    }
+    public void addHighestItemModifier(Item item, int modifier, int groupId) {
+        highestItemModifiers.computeIfAbsent(groupId, k -> new HashMap<>()).put(item, modifier);
     }
 
     public void addGenderModifier(String gender, int modifier) {
@@ -186,6 +197,17 @@ class LongAction extends Action {
             if (character.hasItem(entry.getKey())) {
                 modifier += entry.getValue();
             }
+        }
+
+        //Z grupy itemow o danym ID dodawany jest najwiekszy modyfikator z przedmiotu, ktory posiada postac
+        for (Map<Item, Integer> group : highestItemModifiers.values()) {
+            int highestItemModifier = 0;
+            for (Map.Entry<Item, Integer> entry : group.entrySet()) {
+                if (character.hasItem(entry.getKey())) {
+                    highestItemModifier = Math.max(-12, entry.getValue());
+                }
+            }
+            modifier += highestItemModifier;
         }
 
         if (character.getGender().equals("Male"))
