@@ -235,6 +235,7 @@ public class LongActions {
 
         if (character.hasItem(Item.SHIELD)) {
             System.out.println(", but "+character.getPron(true)+" Shield gets broken in the process.");
+            character.removeItem(Item.SHIELD);
         } else System.out.println(".");
 
         character.addItem(Item.FOOD);

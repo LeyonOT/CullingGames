@@ -11,7 +11,7 @@ BUSH_SCAVENGE "$char$ rummages through the underbrush, hoping to find edible ber
 DANGER_SENSE "$char$ listens intently for distant sounds of danger, trying to gauge the location of other competitors." 2 null null false false
 STONE_THROWING "$char$ finds a smooth stone and spends some time practicing throwing it into a nearby pond." 1 null null false false
 CRY "$char$ breaks down crying." 8 null null false false
-PARANOID "$char$ thinks someone is following them and hides behind some bushes." 1 null null false false
+PARANOID "$char$ thinks $pronoun1$ is followed by someone and hides behind some bushes." 1 null null false false
 RUN "$char$ takes a jog around the field but finds nothing." 10 null null false false
 STRETCH "$char$ stretches $pronoun2$ muscles to keep them in shape." 5 null null false false
 FIND_BERRIES "$char$ finds some berries and eats them." -10 null null false false
@@ -37,7 +37,7 @@ FIND_HAMMER_1 "$char$ finds a Hammer in some abandoned toolbox." 4 null HAMMER f
 -- CRAFT ACTIONS
 
 CRAFT_ROPE_1 "$char$ rips off $pronoun2$ torn clothes to make a Rope with." 5 null ROPE false false
-CRAFT_ROPE_2 "$char$ finds some sturdy grass and picks it to make a Rope with." 5 null ROPE false false
+CRAFT_ROPE_2 "$char$ finds some sturdy grass and picks it up to make a Rope." 5 null ROPE false false
 CRAFT_TORCH_1 "$char$ finds a stick and uses $pronoun2$ torn clothes to make a Torch out of them." 5 null TORCH false false
 CRAFT_TORCH_2 "$char$ finds a stick and uses some grass to make a Torch out of them." 8 null TORCH false false
 SHIELD_CRAFT "$char$ uses $pronoun2$ insane genius, few loose wooden boards $pronoun1$ found and a Rope to craft a Shield." 4 ROPE SHIELD true false
@@ -59,10 +59,15 @@ TORCH_CAVE_2 "$char$ lights a Torch and uses it to explore a dark cave, but gets
 
 -- MAP ACTIONS
 
-MAP_SEARCH_FOOD "$char$ uses $pronoun2$ Map to find a camp with some leftovers." 4 MAP FOOD true false
-MAP_SEARCH_CHEST "$char$ uses $pronoun2$ Map to find a chest buried under some sand and mud." 7 MAP RANDOM5 true false
-MAP_SEARCH_RUINS "$char$ uses $pronoun2$ Map to find lost ruins with some loot in them." 8 MAP RANDOM5 true false
+MAP_SEARCH_FOOD "$char$ uses $pronoun2$ Map to find an abandoned camp with some leftover Food." 4 MAP FOOD true false
+MAP_SEARCH_CHEST_1 "$char$ uses $pronoun2$ Map to find a chest buried under some sand and mud." 7 MAP RANDOM5 true false
+MAP_SEARCH_CHEST_2 "$char$ uses $pronoun2$ Map to find a chest hidden in a deep forest." 5 MAP RANDOM5 true false
+MAP_SEARCH_CHEST_3 "$char$ uses $pronoun2$ Map to find a small cave with a chest in it." 4 MAP RANDOM5 true false
+MAP_SEARCH_CAMP "$char$ uses $pronoun2$ Map to find an abandoned camp with some items." 5 MAP RANDOM5 true false
+MAP_SEARCH_RUINS_1 "$char$ uses $pronoun2$ Map to find lost ruins with some loot in them." 8 MAP RANDOM5 true false
+MAP_SEARCH_RUINS_2 "$char$ uses $pronoun2$ Map to find a ruined shack with some loot in it" 8 MAP RANDOM5 true false
 MAP_SEARCH_FOOD_2 "$char$ uses $pronoun2$ Map to find what looks like an abandoned altar with some offerings still on it." 4 MAP FOOD true false
+MAP_SEARCH_FOOD_2 "$char$ uses $pronoun2$ Map to find a hidden bag full of Food." 4 MAP FOOD true false
 MAP_SEARCH_GUN "$char$ uses $pronoun2$ Map to find a Gun buried in ground under an old tree." 3 MAP GUN true false
 
 -- ROCK ACTIONS

@@ -99,6 +99,7 @@ public class ActionLoader {
         ACTION_MAP.put("FIND_TREASURE_1", LongActions.FIND_TREASURE_1);
         ACTION_MAP.put("FIND_TREASURE_2", LongActions.FIND_TREASURE_2);
         ACTION_MAP.put("FIND_TREASURE_3", LongActions.FIND_TREASURE_3);
+        ACTION_MAP.put("BEAR_ATTACK", LongActions.BEAR_ATTACK);
     }
 
     private static Action getActionByName(String actionName) {
