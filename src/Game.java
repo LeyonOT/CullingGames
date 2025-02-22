@@ -20,33 +20,42 @@ public class Game {
 
     public void setupCharacters() {
         int numCharacters = 0;
-
         System.out.print("'c' to start game, 'q' to quickplay: ");
-        String input = scanner.nextLine();
+        while (true) {
+            String input = scanner.nextLine();
 
-        if (input.equalsIgnoreCase("c") || input.equalsIgnoreCase("")) {
-            System.out.println("Starting game setup...");
-        } else if (input.equalsIgnoreCase("q")) {
-            System.out.println("Quickplaying game setup...");
-            Character character = new Character("Tom", "Male", Trait.STRONG);
-            characters.add(character);
-            character = new Character("Maks", "Male", Trait.SMART);
-            characters.add(character);
-            character = new Character("Julka", "Female", Trait.LUCKY);
-            characters.add(character);
-            character = new Character("Adi", "Male", Trait.FAST);
-            characters.add(character);
-            System.out.println("All characters have been set up. The game is ready to begin!");
-            return;
+            if (input.equalsIgnoreCase("c") || input.equalsIgnoreCase("")) {
+                System.out.println("Starting game setup...");
+                break;
+            } else if (input.equalsIgnoreCase("q")) {
+                System.out.println("Quickplaying game setup...");
+                Character character = new Character("Tom", "Male", Trait.STRONG);
+                characters.add(character);
+                character = new Character("Maks", "Male", Trait.SMART);
+                characters.add(character);
+                character = new Character("Julka", "Female", Trait.LUCKY);
+                characters.add(character);
+                character = new Character("Adi", "Male", Trait.FAST);
+                characters.add(character);
+                System.out.println("All characters have been set up. The game is ready to begin!");
+                return;
+            } else {
+                System.out.println("Invalid input. Please enter 'c' to start game or 'q' to quickplay: ");
+            }
         }
 
-        while (numCharacters < 4 || numCharacters > 8) {
-            System.out.print("Enter the number of characters (4-8): ");
-            numCharacters = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+        System.out.print("Enter the number of characters (4-8): ");
+        while (true) {
+            if (scanner.hasNextInt()) {
+                numCharacters = scanner.nextInt();
+                scanner.nextLine();
 
-            if (numCharacters < 4 || numCharacters > 8) {
-                System.out.println("Invalid number. Please enter a number between 4 and 8.");
+                if (numCharacters >= 4 && numCharacters <= 8) break;
+                else System.out.println("Invalid number. Please enter a correct number of characters");
+
+            } else {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine();
             }
         }
 
@@ -56,28 +65,28 @@ public class Game {
             System.out.print("Enter name: ");
             String name = scanner.nextLine();
 
-            //System.out.print("Enter gender (Male/Female): ");
-            //String gender = scanner.nextLine();
+            System.out.print("Enter gender (Male/Female): ");
+            String gender = scanner.nextLine();
 
             Trait trait = null;
+            System.out.print("Choose a trait (Strong, Smart, Fast, Charismatic, Lucky): ");
             while (trait == null) {
-                System.out.print("Choose a trait (Strong, Smart, Fast, Charismatic, Lucky): ");
                 String traitInput = scanner.nextLine().toLowerCase();
 
                 switch (traitInput) {
-                    case "strong":
+                    case "strong", "st":
                         trait = Trait.STRONG;
                         break;
-                    case "smart":
+                    case "smart", "sm":
                         trait = Trait.SMART;
                         break;
-                    case "fast":
+                    case "fast", "f":
                         trait = Trait.FAST;
                         break;
-                    case "charismatic":
+                    case "charismatic", "c", "ch":
                         trait = Trait.CHARISMATIC;
                         break;
-                    case "lucky":
+                    case "lucky", "l":
                         trait = Trait.LUCKY;
                         break;
                     default:
@@ -89,7 +98,7 @@ public class Game {
             Character character = new Character(name, "Male", trait);
             characters.add(character);
 
-            System.out.println("Character created: " + name + " (" + "Male" + ", " + trait + ")");
+            System.out.println("Character created: " + name + " (" + gender + ", " + trait + ")");
         }
 
         System.out.println("All characters have been set up. The game is ready to begin!");
@@ -115,7 +124,7 @@ public class Game {
         }
     }
 
-    public void startGame() {
+    public void runGame() {
         while (characters.size() > 1) {
             dayCount++;
             System.out.println("------------------- Day " + dayCount + " -------------------");
@@ -150,7 +159,6 @@ public class Game {
             }
         }
         declareWinner();
-        scanner.close();
     }
 
 

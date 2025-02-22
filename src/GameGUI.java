@@ -24,6 +24,10 @@ public class GameGUI extends JFrame {
         // Tutaj wyświetla się to co się dzieje
         outputArea = new JTextArea();
         outputArea.setEditable(false);
+
+        Font font = new Font("Helvetica", Font.PLAIN, 25);
+        outputArea.setFont(font);
+
         JScrollPane scrollPane = new JScrollPane(outputArea);
         add(scrollPane, BorderLayout.CENTER);
 
@@ -52,6 +56,7 @@ public class GameGUI extends JFrame {
 
         continueButton.addActionListener(e -> {
             try {
+                typeText("c");
                 pos.write("c\n".getBytes());
                 pos.flush();
             } catch (IOException ex) {
@@ -64,6 +69,7 @@ public class GameGUI extends JFrame {
         String text = inputField.getText();
         if (text != null && !text.isEmpty()) {
             try {
+                typeText(text);
                 // wysyła tekst i newline jakby by ł enterem
                 pos.write((text + "\n").getBytes());
                 pos.flush();
@@ -72,6 +78,11 @@ public class GameGUI extends JFrame {
             }
             inputField.setText("");  // Czyści po wysłaniu
         }
+    }
+
+    private void typeText(String text) {
+        outputArea.append(text + "\n");
+        outputArea.setCaretPosition(outputArea.getDocument().getLength());
     }
 
     // nie użyty ale nie usuwaj może się przyda potem
@@ -106,6 +117,13 @@ public class GameGUI extends JFrame {
                 gui.pos = pos;
                 gui.setVisible(true);
 
+                try {
+                    pos.write("\n".getBytes());
+                    pos.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 // dzięki temu output idzie na konsole I do GUI
                 PrintStream guiOut = new PrintStream(new TextAreaOutputStream(gui.getOutputArea(), System.out));
                 System.setOut(guiOut);
@@ -127,7 +145,7 @@ public class GameGUI extends JFrame {
                     Game gameManager = new Game(actionList);
 
                     gameManager.setupCharacters();
-                    gameManager.startGame();
+                    gameManager.runGame();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
