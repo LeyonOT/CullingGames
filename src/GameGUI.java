@@ -67,7 +67,7 @@ public class GameGUI extends JFrame {
 
     private void sendInput() {
         String text = inputField.getText();
-        if (text != null && !text.isEmpty()) {
+        if (text != null) {
             try {
                 typeText(text);
                 // wysyła tekst i newline jakby by ł enterem
