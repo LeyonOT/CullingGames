@@ -17,6 +17,11 @@ STRETCH "$char$ stretches their muscles to keep them in shape." 5 null null fals
 FIND_BERRIES "$char$ finds some berries and eats them." -10 null null false false
 SING "$char$ sings a song to keep their spirits up." 2 null null false false
 FIDGET "$char$ fidgets nervously due to anxiety." 1 null null false false
+REMEMBER_HOME "$char$ recalls memories of their past life, trying to maintain hope." 1 null null false false
+CLIMB_CLIFF "$char$ scales a rocky cliff face, hoping to gain a better vantage point." 12 null null false false
+FALL_CLIFF "$char$ loses their footing and falls a short distance down a cliff face." 10 null null false true
+SNAKE_BITE "$char$ suddenly gets bitten by a nearby snake." 15 null null false true
+BREAK_ARM "$char$ falls down and breaks their fall with their arm." 10 null null false true
 
 -- FIND ACTIONS
 
@@ -64,3 +69,10 @@ MAP_SEARCH_GUN "$char$ uses their Map to find a Gun buried in ground under an ol
 
 ROCK_THROW_1 "$char$ throws their Rock at a nearby bunny, killing it instantly." 6 ROCK FOOD true false
 ROCK_THROW_2 "$char$ throws their Rock at a nearby bunny, but misses." 6 ROCK null true false
+
+-- BOW ACTIONS
+
+BOW_SHOOT_1 "$char$ shoots from their bow, aiming at a nearby squirrel, killing it instantly" 12 BOW FOOD false false
+BOW_SHOOT_2 "$char$ shoots from their bow, aiming at a nearby bunny, killing it instantly" 12 BOW FOOD false false
+BOW_SHOOT_3 "$char$ shoots from their bow, aiming at a nearby squirrel, but misses" 12 BOW FOOD false false
+BOW_SHOOT_4 "$char$ shoots from their bow, aiming at a nearby deer, killing it instantly" 12 BOW FOOD false false
