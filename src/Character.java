@@ -4,11 +4,14 @@ public class Character {
     private String name;
     private String gender;
     private Trait trait;
+    private Personality[] personality;
     private int saturation;
     private boolean tired;
     private boolean wounded;
     private List<Item> equipment;
+    private int value;
     private Team team;
+    private boolean teamActionParticipation;
     private boolean alive;
 
     private final int maxSlots;
@@ -18,12 +21,15 @@ public class Character {
         this.name = name;
         this.gender = gender;
         this.trait = trait;
+        this.personality = Personality.getRandom();
         this.saturation = 100;
         this.tired = false;
         this.wounded = false;
         this.equipment = new ArrayList<>();
         this.team = null;
+        this.teamActionParticipation = false;
         this.alive = true;
+        this.value = 0;
 
         this.maxSlots = trait == Trait.STRONG ? 5 : 4;
         this.usedSlots = 0;
@@ -41,7 +47,7 @@ public class Character {
         //System.out.println(name + (saturationCost>=0?" loses ":" gains ") + (saturationCost>=0?saturationCost:-saturationCost) + " saturation.");
         System.out.println("(" + (saturationCost>=0?"-":"+") + (saturationCost>=0?saturationCost:-saturationCost) + ") saturation.");
         if (this.saturation <=0) {
-            alive = false;
+            die();
             System.out.println(name + " has died of starvation.");
         }
 
@@ -55,22 +61,21 @@ public class Character {
             wounded = true;
         }
         else {
-            alive = false;
+            die();
             System.out.println(name + " died from the damage "+getPron(false)+" took!");
         }
+    }
+
+    private void die(){
+        team.removeMember(this);
+        alive = false;
     }
 
     public void healWound() {
         this.wounded = false;
     }
 
-    public boolean isAlive() {
-        return alive;
-    }
 
-    public boolean isWounded() {
-        return wounded;
-    }
 
     //EQUIPMENT
     private void sortEquipmentByPriority() {
@@ -127,6 +132,7 @@ public class Character {
             }
         }
         sortEquipmentByPriority();
+        updateValue();
         if (!wasAdded) {
             System.out.println(name + " could not add " + newItem.getName() + " to "+getPron(true)+" equipment.");
         }
@@ -144,6 +150,7 @@ public class Character {
                 equipment.remove(randomItem);
                 usedSlots -= randomItem.getSlotSize();
                 System.out.println(name + " lost " + randomItem.getName() + " from "+getPron(true)+" equipment.");
+                updateValue();
                 return true;
             }
         }
@@ -152,6 +159,7 @@ public class Character {
             equipment.remove(item);
             usedSlots -= item.getSlotSize();
             System.out.println(name + " removed " + item.getName() + " from "+getPron(true)+" equipment.");
+            updateValue();
             return true;
         } else {
             System.out.println(name + " does not have " + item.getName() + " in "+getPron(true)+" equipment.");
@@ -172,13 +180,21 @@ public class Character {
         return s.toString();
     }
 
+    private void updateValue() {
+        value = 0;
+        for (Item i:equipment) {
+            value += i.getPriority() * 10 + 5 * (4-i.getSlotSize());
+        }
+    }
+
     //Team-ups and shit
     public void setTeam(Team team) {
         this.team = team;
     }
+    public void setTAP(boolean set) { teamActionParticipation = set; }
 
-    public boolean hasTeammates() {
-        return team != null && team.getMembers().size() > 1;
+    public boolean inTeam() {
+        return team != null;
     }
 
 
@@ -190,21 +206,37 @@ public class Character {
     public int getSaturation() {
         return saturation;
     }
+    public boolean isAlive() {
+        return alive;
+    }
+    public boolean isWounded() {
+        return wounded;
+    }
     public Team getTeam() {
         return team;
     }
+    public boolean getTAP() { return teamActionParticipation; }
     public String getGender() {
         return gender;
     }
     public Trait getTrait() {
         return tired?Trait.TIRED:trait;
     }
+    public int getValue() {
+        return value;
+    }
+    public boolean hasPersonality(Personality p) {
+        for (Personality i : personality) {
+            if (i.equals(p))
+                return true;
+        }
+        return false;
+    }
     public void printStatus() {
         System.out.println(name + " (" + gender + ") | Sat: " + saturation + " | Trait: " + getTrait() + "\n" +
-                "Team: " + team + "\n" +
+                "Personality: " + personality[0] + ", " + personality[1] + "\nTeam: " + (inTeam()?team.getName():"none") + "\n" +
                 showEquipment());
     }
-
     public String getPron(boolean b) {
         if (b)
             return gender.equals("Male")?"his":"her";

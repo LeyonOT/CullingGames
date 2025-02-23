@@ -19,6 +19,18 @@ public class ActionLoader {
 
         return actions;
     }
+    public static List<TeamAction> loadActions(String teamActionsFile) {
+        List<TeamAction> actions = new ArrayList<>();
+
+        try {
+            actions.addAll(loadTeamActionsFromFile(teamActionsFile));
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return actions;
+    }
 
     private static List<Action> loadLongActionsFromFile(String fileName) throws IOException {
         return Files.lines(Paths.get(fileName))
@@ -27,6 +39,16 @@ public class ActionLoader {
                 .filter(line -> !line.isEmpty())
                 .map(ActionLoader::tryGetActionByName)
                 .filter(Objects::nonNull) //nie bierze pod uwage akcji ktore nie istnieja
+                .collect(Collectors.toList());
+    }
+    //Wiem ze to LongActions i TeamActions from file to to samo, ale przyda sie pozniej do czytania z pliku
+    private static List<TeamAction> loadTeamActionsFromFile(String fileName) throws IOException {
+        return Files.lines(Paths.get(fileName))
+                .filter(line -> !line.startsWith("--"))
+                .map(String::trim)
+                .filter(line -> !line.isEmpty())
+                .map(ActionLoader::tryGetTeamActionByName)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
@@ -88,9 +110,17 @@ public class ActionLoader {
             System.out.println("Warning: Action '" + actionName + "' from file not loaded because it does not exist.");
             return null;
         }
+    }private static TeamAction tryGetTeamActionByName(String actionName) {
+        try {
+            return getTeamActionByName(actionName);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Warning: Action '" + actionName + "' from file not loaded because it does not exist.");
+            return null;
+        }
     }
 
     private static final Map<String, Action> ACTION_MAP = new HashMap<>();
+    private static final Map<String, TeamAction> TEAM_ACTION_MAP = new HashMap<>();
     static {
         //Long Actions
         ACTION_MAP.put("LOG_ENCOUNTER", LongActions.LOG_ENCOUNTER);
@@ -100,10 +130,19 @@ public class ActionLoader {
         ACTION_MAP.put("FIND_TREASURE_2", LongActions.FIND_TREASURE_2);
         ACTION_MAP.put("FIND_TREASURE_3", LongActions.FIND_TREASURE_3);
         ACTION_MAP.put("BEAR_ATTACK", LongActions.BEAR_ATTACK);
+
+        //Team Actions
+        TEAM_ACTION_MAP.put("SETUP_CAMP", TeamActions.SETUP_CAMP);
     }
 
     private static Action getActionByName(String actionName) {
         Action action = ACTION_MAP.get(actionName);
+        if (action == null) {
+            throw new IllegalArgumentException("Unknown action: " + actionName);
+        }
+        return action;
+    }private static TeamAction getTeamActionByName(String actionName) {
+        TeamAction action = TEAM_ACTION_MAP.get(actionName);
         if (action == null) {
             throw new IllegalArgumentException("Unknown action: " + actionName);
         }

@@ -141,8 +141,9 @@ public class GameGUI extends JFrame {
                 // gra czyta z naszeg in
                 while ((line = reader.readLine()) != null) {
                     List<Action> actionList = ActionLoader.loadActions("simple_actions.txt", "advanced_actions.txt", "modded_actions.txt");
+                    List<TeamAction> teamActionList = ActionLoader.loadActions("team_actions.txt");
 
-                    Game gameManager = new Game(actionList);
+                    Game gameManager = new Game(actionList, teamActionList);
 
                     gameManager.setupCharacters();
                     gameManager.runGame();
