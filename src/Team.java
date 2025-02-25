@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -33,12 +34,19 @@ public class Team {
         System.out.println(character.getName() + " has joined the " + name + " Team!");
     }
 
-    public void removeMember(Character character) {
+    public void removeMember(Character character, boolean showText) {
         members.remove(character);
-        character.setTeam(null);
+        if (showText)
+            System.out.println(character.getName() + " left the " + name + " Team.");
         if (members.isEmpty())
             nameChoices.add(name);
-        //Moze tutaj SOUT?
+        character.setTeam(null);
+    }
+
+    public boolean manageTeam() { //TRUE jesli Team dalej istnieje
+        members.removeIf(c -> !c.isAlive());
+        if (members.size() == 1) removeMember(members.get(0), false);
+        return !members.isEmpty();
     }
 
 
@@ -100,7 +108,7 @@ public class Team {
 
         victim.takeWound();
         if (!victim.isAlive()) {
-            removeMember(victim);
+            removeMember(victim, true);
             System.out.println(victim.getName() + " got wounded due to the betrayal.");
         }
     }

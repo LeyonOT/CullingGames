@@ -39,6 +39,15 @@ public class Game {
                 characters.add(new Character("Julka", "Female", Trait.LUCKY));
                 characters.add(new Character("Adi", "Male", Trait.FAST));
 
+                System.out.println("All characters have been set up. The game is ready to begin!");
+                return;
+            } else if (input.equalsIgnoreCase("q2")) {
+                System.out.println("Quickplaying game setup 2...");
+                characters.add(new Character("Tom", "Male", Trait.STRONG));
+                characters.add(new Character("Maks", "Male", Trait.SMART));
+                characters.add(new Character("Julka", "Female", Trait.LUCKY));
+                characters.add(new Character("Adi", "Male", Trait.FAST));
+
                 characters.add(new Character("Stasiek", "Male", Trait.CHARISMATIC));
                 characters.add(new Character("Kuba", "Male", Trait.CHARISMATIC));
                 characters.add(new Character("Januszkiewicz", "Female", Trait.LUCKY));
@@ -46,8 +55,9 @@ public class Game {
 
                 System.out.println("All characters have been set up. The game is ready to begin!");
                 return;
-            } else {
-                System.out.println("Invalid input. Please enter 'c' to start game or 'q' to quickplay: ");
+            }
+            else {
+                    System.out.println("Invalid input. Please enter 'c' to start game or 'q' to quickplay: ");
             }
         }
 
@@ -113,13 +123,14 @@ public class Game {
     public void runGame() {
         while (characters.size() > 1) {
             dayCount++;
-            System.out.println("------------------- Day " + dayCount + " -------------------");
+            System.out.println("\n------------------------ Day " + dayCount + " ------------------------");
             performTeamAction();
             playDayCycle();
             manageTeams();
             removeDeadCharacters();
+            System.out.println("\n--------------------------------------------------------");
             while (true) {
-                System.out.println("Enter command ('c' or enter to continue, 'h' for help):");
+                System.out.print("Enter command ('c' or enter to continue, 'h' for help): ");
 
                 if (scanner.hasNextLine()) {
                     String input = scanner.nextLine();
@@ -138,18 +149,23 @@ public class Game {
                         System.out.println("'t': Display teams information.");
                         System.out.println("'h': Display this help message.");
                     } else if (input.equalsIgnoreCase("t")) {
+                        System.out.println();
                         for (Team t : teams){
                             System.out.print("Team " + t.getName() + ": ");
                             for (int i = 0; i < t.getMembers().size()-1; i++) {
                                 System.out.print(t.getMembers().get(i).getName() + ", ");
                             }
-                            System.out.println(t.getMembers().get(t.getMembers().size()-1).getName() + ".");
+                            if (!t.getMembers().isEmpty())
+                                System.out.println(t.getMembers().get(t.getMembers().size()-1).getName() + ".");
                         }
+                        if (teams.isEmpty())
+                            System.out.println("No teams are currently formed.");
+                        System.out.println();
                     } else {
-                        System.out.println("Invalid command. Please try again.");
+                        System.out.print("Invalid command. Please try again.");
                     }
                 } else {
-                    System.out.println("No proper input received. Please enter a command.");
+                    System.out.print("No proper input received. Please enter a command.");
                 }
             }
         }
@@ -288,12 +304,12 @@ public class Game {
             //Form a Team
             for (Character c2: temp) {
                 if (c2.inTeam() || c.equals(c2)) continue;
-                double chanceToJoin = 0.02;
+                double chanceToJoin = 0.015;
                 double modifier2 = (c2.hasPersonality(Personality.SOCIABLE) ? 0.02 : 0) -
-                        (c.hasPersonality(Personality.RECLUSIVE) ? 0.02 : 0);
+                        (c.hasPersonality(Personality.RECLUSIVE) ? 0.012 : 0);
                 double r = new Random().nextDouble();
+                //System.out.println(r + " | " + (r-modifier) + " | " + (chanceToJoin + modifier2));
                 if (r-modifier < chanceToJoin + modifier2) {
-                    System.out.println(r + " | " + (r-modifier) + " | " + (chanceToJoin + modifier2));
                     teams.add(new Team(c, c2));
                     break;
                 }
@@ -306,8 +322,8 @@ public class Game {
                     if (t.getMembers().size() > characters.size()/2) continue;
                     double baseChance = 0.02 * characters.size()/2/t.getMembers().size();
                     double r = new Random().nextDouble();
+                    //System.out.println(r + " " + (baseChance + modifier));
                     if (r < baseChance + modifier) {
-                        System.out.println(r + " " + (baseChance + modifier));
                         t.addMember(c, true);
                         break;
                     }
@@ -317,7 +333,13 @@ public class Game {
     }
 
     public void manageTeams() {
-
+        List<Team> removeTeams = new ArrayList<>();
+        for (Team t: teams) {
+            if (!t.manageTeam()) removeTeams.add(t);
+        }
+        for (Team t:removeTeams) {
+            teams.remove(t);
+        }
     }
 
 

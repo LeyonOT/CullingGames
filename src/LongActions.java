@@ -8,8 +8,8 @@ public class LongActions {
     }
     public static final LongAction LOG_ENCOUNTER = new LongAction.Builder(
             "$char$ encounters a big log blocking the path.",
-            "$char$ easily gets over the log",
-            "$char$ struggles and loses a lot of energy trying to get over the log.",
+            "$pronoun1$ easily gets over the log",
+            "$pronoun1$ struggles and loses a lot of energy trying to get over the log.",
             8
     ).withModifiers(action -> {
         action.addGenderModifier("Male", 1);
@@ -22,15 +22,15 @@ public class LongActions {
     }).withLoseEffects(character -> {
         character.reduceSaturation(18);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getName() + " catches on a sharp branch while trying to get over the log and wounds "+character.getPron(true)+" leg.");
+        System.out.println(character.getPron(false) + " catches on a sharp branch while trying to get over the log and wounds "+character.getPron(true)+" leg.");
         character.reduceSaturation(23);
         character.takeWound();
     }).build();
 
     public static final LongAction RIVER_CROSSING = new LongAction.Builder(
             "$char$ reaches a river and needs to cross it.",
-            "$char$ finds a shallow part of the river and crosses it easily.",
-            "$char$ tries to swim across the river but gets tired and struggles.",
+            "$pronoun1$ finds a shallow part of the river and crosses it easily.",
+            "$pronoun1$ tries to swim across the river but gets tired and struggles.",
             6
     ).withModifiers(action -> {
         action.addTraitModifier(Trait.FAST, 2);
@@ -41,15 +41,15 @@ public class LongActions {
     }).withLoseEffects(character -> {
         character.reduceSaturation(21);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getName() + " gets caught in a strong current and is swept away.");
+        System.out.println(character.getPron(false) + " gets caught in a strong current and is swept away.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(43);
     }).build();
 
     public static final LongAction FRUIT_TREE_CLIMB = new LongAction.Builder(
             "$char$ sees a fruit tree and decides to climb it.",
-            "$char$ climbs the tree",
-            "$char$ climbs the tree and finds nothing edible.",
+            "$pronoun1$ climbs the tree",
+            "$pronoun1$ climbs the tree and finds nothing edible.",
             5
     ).withModifiers(action -> {
         action.addTraitModifier(Trait.STRONG, 1);
@@ -82,15 +82,15 @@ public class LongActions {
     }).withLoseEffects(character -> {
         character.reduceSaturation(15);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getName() + " falls from the tree and breaks "+character.getPron(true)+" arm.");
+        System.out.println(character.getPron(false) + " falls from the tree and breaks "+character.getPron(true)+" arm.");
         character.reduceSaturation(15);
         character.takeWound();
     }).build();
 
     public static final LongAction FIND_TREASURE_1 = new LongAction.Builder(
             "$char$ finds a hidden treasure chest.",
-            "$char$ opens the chest and finds",
-            "$char$ opens the chest but it's empty.",
+            "$pronoun1$ opens the chest and finds",
+            "$pronoun1$ opens the chest but it's empty.",
             6
     ).withModifiers(action -> {
         action.addTraitModifier(Trait.LUCKY, 3);
@@ -117,15 +117,15 @@ public class LongActions {
     }).withLoseEffects(character -> {
         character.reduceSaturation(5);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getName() + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
+        System.out.println(character.getPron(false) + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(0);
     }).build();
 
     public static final LongAction FIND_TREASURE_2 = new LongAction.Builder(
             "$char$ uses $pronoun2$ Map to find a hidden treasure chest.",
-            "$char$ opens the chest and finds",
-            "$char$ opens the chest but it's empty.",
+            "$pronoun1$ opens the chest and finds",
+            "$pronoun1$ opens the chest but it's empty.",
             6
     ).withRequiredItem(
             Item.MAP
@@ -159,15 +159,15 @@ public class LongActions {
         character.reduceSaturation(5);
     }).withCriticalLoss(character -> {
         character.removeItem(Item.MAP);
-        System.out.println(character.getName() + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
+        System.out.println(character.getPron(false) + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(0);
     }).build();
 
     public static final LongAction FIND_TREASURE_3 = new LongAction.Builder(
             "$char$ finds a hidden treasure chest.",
-            "$char$ opens the chest and finds",
-            "$char$ opens the chest but it's empty.",
+            "$pronoun1$ opens the chest and finds",
+            "$pronoun1$ opens the chest but it's empty.",
             6
     ).withModifiers(action -> {
         action.addTraitModifier(Trait.LUCKY, 3);
@@ -194,15 +194,15 @@ public class LongActions {
     }).withLoseEffects(character -> {
         character.reduceSaturation(5);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getName() + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
+        System.out.println(character.getPron(false) + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(0);
     }).build();
 
     public static final LongAction BEAR_ATTACK = new LongAction.Builder(
             "$char$ gets suddenly attacked by a bear.",
-            "$char$ wins without severe injuries by",
-            "$char$ somehow escapes after long struggle and few wounds.",
+            "$pronoun1$ wins without severe injuries by",
+            "$pronoun1$ somehow escapes after long struggle and few wounds.",
             10
     ).withModifiers(action -> {
         action.addTraitModifier(Trait.STRONG, 1);
@@ -245,7 +245,7 @@ public class LongActions {
         character.reduceSaturation(31);
         character.takeWound();
     }).withCriticalLoss(character -> {
-        System.out.println(character.getName() + "gets mauled to death by the Bear before "+character.getPron(false)+" can even react.");
+        System.out.println(character.getPron(false) + "gets mauled to death by the Bear before "+character.getPron(false)+" can even react.");
         character.takeWound();
         character.takeWound();
     }).build();

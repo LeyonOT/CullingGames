@@ -24,7 +24,9 @@ public class Action {
     public void perform(Character character) {
         if (isAccessible(character)) {
             System.out.println();
-            System.out.println(replaceVal(description, character));
+            String s = replaceVal(description, character);
+            s = s.toUpperCase().charAt(0) + s.substring(1);
+            System.out.println(s);
             applyEffects(character);
         } else { //nie powinno si enigdy pojawic
             System.out.println(character.getName() + " can't perform this action due to lack of required item.");
@@ -146,8 +148,10 @@ class LongAction extends Action {
         int result = roll + modifier;
 
         System.out.println();
-        System.out.println(replaceVal(description, character));
-        System.out.println("Roll: " + roll + ", Modifier: " + modifier + ", Total: " + result + " | Difficulty: " + baseDifficulty);
+        String s = replaceVal(description, character);
+        s = s.toUpperCase().charAt(0) + s.substring(1);
+        System.out.print(s);
+        System.out.println(" | (R: " + roll + ", T: " + result + ", D: " + baseDifficulty + ")");
 
         if (roll == 0) {
             System.out.println("Critical failure!");
@@ -156,10 +160,14 @@ class LongAction extends Action {
         }
 
         if (result >= baseDifficulty) {
-            System.out.print(replaceVal(winDesc, character));
+            s = replaceVal(winDesc, character);
+            s = s.toUpperCase().charAt(0) + s.substring(1);
+            System.out.print(s);
             winEffectApplier.apply(character);
         } else {
-            System.out.println(replaceVal(loseDesc, character));
+            s = replaceVal(loseDesc, character);
+            s = s.toUpperCase().charAt(0) + s.substring(1);
+            System.out.println(s);
             loseEffectApplier.apply(character);
         }
     }

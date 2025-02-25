@@ -67,7 +67,6 @@ public class Character {
     }
 
     private void die(){
-        team.removeMember(this);
         alive = false;
     }
 
