@@ -28,11 +28,30 @@ public class GameGUI extends JFrame {
         // Tutaj wyświetla się to co się dzieje
         outputPane = new JTextPane();
         outputPane.setEditable(false);
+        outputPane.setFocusable(true);
 
         StyledDocument doc = outputPane.getStyledDocument();
         SimpleAttributeSet centerAttr = new SimpleAttributeSet();
         StyleConstants.setAlignment(centerAttr, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0, doc.getLength(), centerAttr, false);
+
+        InputMap im = outputPane.getInputMap(JComponent.WHEN_FOCUSED);
+        ActionMap am = outputPane.getActionMap();
+        String[] keys = {"c", "h", "i", "q"};
+        for (String key : keys) {
+            im.put(KeyStroke.getKeyStroke(key.charAt(0)), key);
+            am.put(key, new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        pos.write((key + "\n").getBytes());
+                        pos.flush();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        }
 
         Font font = new Font("Helvetica", Font.PLAIN, 17);
         outputPane.setFont(font);
