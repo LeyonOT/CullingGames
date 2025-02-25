@@ -5,21 +5,39 @@ import java.util.Random;
 public class Team {
     private List<Character> members;
     private List<Item> sharedEquipment;
-
-    public Team() {
-        this.members = new ArrayList<>();
-        this.sharedEquipment = new ArrayList<>();
+    private String name;
+    private static List<String> nameChoices = new ArrayList<>();
+    static {
+        nameChoices.add("Alpha"); nameChoices.add("Beta"); nameChoices.add("Gamma"); nameChoices.add("Delta");
+        nameChoices.add("Epsilon"); nameChoices.add("Zeta"); nameChoices.add("Eta"); nameChoices.add("Theta");
+        nameChoices.add("Iota"); nameChoices.add("Kappa"); nameChoices.add("Lambda"); nameChoices.add("Mu");
+        nameChoices.add("Nu"); nameChoices.add("Xi"); nameChoices.add("Omicron"); nameChoices.add("Pi");
+        nameChoices.add("Rho"); nameChoices.add("Sigma"); nameChoices.add("Tau"); nameChoices.add("Upsilon");
+        nameChoices.add("Phi"); nameChoices.add("Chi"); nameChoices.add("Psi"); nameChoices.add("Omega");
     }
 
-    public void addMember(Character character) {
+    public Team(Character c1, Character c2) {
+        this.members = new ArrayList<>();
+        addMember(c1, false);
+        addMember(c2, false);
+        this.sharedEquipment = new ArrayList<>();
+        this.name = nameChoices.get(new Random().nextInt(nameChoices.size()));
+        nameChoices.remove(name);
+        System.out.println(c1.getName() + " and " + c2.getName() + " decided to team up!");
+    }
+
+    public void addMember(Character character, boolean showMessage) {
         members.add(character);
         character.setTeam(this);
-        //Moze tutaj SOUT?
+        if (showMessage)
+        System.out.println(character.getName() + " has joined the " + name + " Team!");
     }
 
     public void removeMember(Character character) {
         members.remove(character);
         character.setTeam(null);
+        if (members.isEmpty())
+            nameChoices.add(name);
         //Moze tutaj SOUT?
     }
 
@@ -28,9 +46,21 @@ public class Team {
     public List<Character> getMembers() {
         return members;
     }
+    public List<Character> getActionMembers() {
+        List<Character> memberList = new ArrayList<>();
+        for (Character c: members) {
+            if (c.getTAP()) memberList.add(c);
+        }
+        //System.out.println(name + " participating members: " + memberList.size());
+        return memberList;
+    }
 
     public List<Item> getSharedEquipment() {
         return sharedEquipment;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void addEquipment(Item item) {
@@ -74,4 +104,6 @@ public class Team {
             System.out.println(victim.getName() + " got wounded due to the betrayal.");
         }
     }
+
+
 }

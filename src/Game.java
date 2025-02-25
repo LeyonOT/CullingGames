@@ -4,16 +4,18 @@ public class Game {
     private List<Character> characters;
     private List<Team> teams;
     private List<Action> actions;
+    private List<TeamAction> teamActions;
     private int dayCount;
     private Scanner scanner;
     private Map<Action, Integer> actionRecency;
 
-    public Game(List<Action> actions) {
+    public Game(List<Action> actions, List<TeamAction> teamActions) {
         this.characters = new ArrayList<>();
         this.dayCount = 0;
         this.scanner = new Scanner(System.in);
         this.teams = new ArrayList<>();
         this.actions = actions;
+        this.teamActions = teamActions;
         this.actionRecency = new HashMap<>();
 
         for (Action action : actions) {
@@ -32,14 +34,16 @@ public class Game {
                 break;
             } else if (input.equalsIgnoreCase("q")) {
                 System.out.println("Quickplaying game setup...");
-                Character character = new Character("Tom", "Male", Trait.STRONG);
-                characters.add(character);
-                character = new Character("Maks", "Male", Trait.SMART);
-                characters.add(character);
-                character = new Character("Julka", "Female", Trait.LUCKY);
-                characters.add(character);
-                character = new Character("Adi", "Male", Trait.FAST);
-                characters.add(character);
+                characters.add(new Character("Tom", "Male", Trait.STRONG));
+                characters.add(new Character("Maks", "Male", Trait.SMART));
+                characters.add(new Character("Julka", "Female", Trait.LUCKY));
+                characters.add(new Character("Adi", "Male", Trait.FAST));
+
+                characters.add(new Character("Stasiek", "Male", Trait.CHARISMATIC));
+                characters.add(new Character("Kuba", "Male", Trait.CHARISMATIC));
+                characters.add(new Character("Januszkiewicz", "Female", Trait.LUCKY));
+                characters.add(new Character("Hillary Clinton", "Feale", Trait.SMART));
+
                 System.out.println("All characters have been set up. The game is ready to begin!");
                 return;
             } else {
@@ -106,34 +110,13 @@ public class Game {
 
         System.out.println("All characters have been set up. The game is ready to begin!");
     }
-
-    public void formTeam(Character char1, Character char2) {
-        Team newTeam = new Team();
-        newTeam.addMember(char1);
-        newTeam.addMember(char2);
-        teams.add(newTeam);
-        System.out.println(char1.getName() + " and " + char2.getName() + " have formed a team!");
-    }
-
-    public void manageTeams() {
-        for (Team team : teams) {
-            if (team.getMembers().size() > 1) {
-                if (new Random().nextDouble() < 0.1) {
-                    team.handleBetrayal();
-                } else {
-                    team.shareResources();
-                }
-            }
-        }
-    }
-
     public void runGame() {
         while (characters.size() > 1) {
             dayCount++;
             System.out.println("------------------- Day " + dayCount + " -------------------");
+            performTeamAction();
             playDayCycle();
             manageTeams();
-            //playNightCycle();
             removeDeadCharacters();
             while (true) {
                 System.out.println("Enter command ('c' or enter to continue, 'h' for help):");
@@ -152,7 +135,16 @@ public class Game {
                         System.out.println("Available commands:");
                         System.out.println("'c': Continue to the next day.");
                         System.out.println("'i': Display character information.");
+                        System.out.println("'t': Display teams information.");
                         System.out.println("'h': Display this help message.");
+                    } else if (input.equalsIgnoreCase("t")) {
+                        for (Team t : teams){
+                            System.out.print("Team " + t.getName() + ": ");
+                            for (int i = 0; i < t.getMembers().size()-1; i++) {
+                                System.out.print(t.getMembers().get(i).getName() + ", ");
+                            }
+                            System.out.println(t.getMembers().get(t.getMembers().size()-1).getName() + ".");
+                        }
                     } else {
                         System.out.println("Invalid command. Please try again.");
                     }
@@ -164,9 +156,7 @@ public class Game {
         declareWinner();
     }
 
-
     //ACTIONS
-
 
     public void assignRandomAction(Character character) {
         Random random = new Random();
@@ -222,7 +212,7 @@ public class Game {
                     eatFood(character, random);
                 } else if (character.isWounded() && character.hasItem(Item.ROPE) && random.nextDouble() < 0.3) {
                     stabilizeWound(character);
-                } else {
+                } else if (!character.getTAP()){
                     assignRandomAction(character);
                 }
             }
@@ -244,9 +234,90 @@ public class Game {
 
 
     //PLACEHOLDER TEAMY
-    public void performTeamAction(Team team) {
-        for (Character member : team.getMembers()) {
+    public void performTeamAction() {
+        Character maxValueCharacter = getMaxValueCharacter();
+        formTeams(maxValueCharacter);
+        for (Character c : characters) {
+            boolean isSociable = c.hasPersonality(Personality.SOCIABLE);
+            boolean isReclusive = c.hasPersonality(Personality.RECLUSIVE);
+            boolean isMaxValue = c.equals(maxValueCharacter);
+            double modifier = (isSociable ? 0.1 : 0) - (isMaxValue ? 0.1 : 0) - (isReclusive ? 0.1 : 0);
+            if (c.inTeam()) c.setTAP(new Random().nextDouble() < 0.7 + modifier);
         }
+
+        for (Team t : teams){
+            int actionTeamSize = t.getActionMembers().size();
+            if (actionTeamSize < 2) {
+                for (Character c:t.getMembers()) c.setTAP(false);
+                continue;
+            }
+            Random random = new Random();
+            int currentRange = teamActions.size();
+            List<TeamAction> tempAction = new ArrayList<>(teamActions);
+
+            while (currentRange > 0) {
+                int actionIndex = random.nextInt(currentRange);
+                TeamAction selectedAction = tempAction.get(actionIndex);
+
+                if (selectedAction.isAccessible(t)) {
+                        selectedAction.perform(t);
+                        break;
+                } else {
+                    //replacing the action
+                    currentRange--;
+                    tempAction.set(actionIndex, tempAction.get(currentRange));
+                }
+            }
+        }
+    }
+
+
+    //JESLI SIE ROBIA ZA CZESTO TO ZMNIEJSZYC STATY NIE WIEM JAK JEST DOBRZE :sob:
+    public void formTeams(Character maxValueCharacter) {
+        Random random = new Random();
+        List<Character> temp = new ArrayList<>(characters);
+        Collections.shuffle(temp, random);
+        for (Character c: temp) {
+            if (c.inTeam()) continue;
+
+            boolean isCharismatic = c.getTrait().equals(Trait.CHARISMATIC);
+            boolean isSociable = c.hasPersonality(Personality.SOCIABLE);
+            boolean isReclusive = c.hasPersonality(Personality.RECLUSIVE);
+            boolean isMaxValue = c.equals(maxValueCharacter);
+            double modifier = (isCharismatic ? 0.06 : 0) + (isSociable ? 0.02 : 0) + (isMaxValue ? 0.05 : 0) - (isReclusive ? 0.08 : 0);
+            //Form a Team
+            for (Character c2: temp) {
+                if (c2.inTeam() || c.equals(c2)) continue;
+                double chanceToJoin = 0.02;
+                double modifier2 = (c2.hasPersonality(Personality.SOCIABLE) ? 0.02 : 0) -
+                        (c.hasPersonality(Personality.RECLUSIVE) ? 0.02 : 0);
+                double r = new Random().nextDouble();
+                if (r-modifier < chanceToJoin + modifier2) {
+                    System.out.println(r + " | " + (r-modifier) + " | " + (chanceToJoin + modifier2));
+                    teams.add(new Team(c, c2));
+                    break;
+                }
+            }
+            if (c.inTeam()) continue;
+            //Join a Team
+            Collections.shuffle(teams, random);
+            if (!teams.isEmpty()){
+                for (Team t : teams) {
+                    if (t.getMembers().size() > characters.size()/2) continue;
+                    double baseChance = 0.02 * characters.size()/2/t.getMembers().size();
+                    double r = new Random().nextDouble();
+                    if (r < baseChance + modifier) {
+                        System.out.println(r + " " + (baseChance + modifier));
+                        t.addMember(c, true);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void manageTeams() {
+
     }
 
 
@@ -266,6 +337,7 @@ public class Game {
 
     //SPECIAL ACTIONS
     private void stabilizeWound(Character character) {
+        System.out.println();
         System.out.println(character.getName() + " uses a Rope to stabilize "+character.getPron(true)+" wound.");
         character.healWound();
         character.removeItem(Item.ROPE);
@@ -274,6 +346,7 @@ public class Game {
 
     private void eatFood(Character character, Random random) {
         int saturationRestored = random.nextInt(16) + 20;
+        System.out.println();
         System.out.println(character.getName() + " takes a break to eat some Food");
         character.reduceSaturation(-saturationRestored);
         character.removeItem(Item.FOOD);
@@ -282,5 +355,17 @@ public class Game {
     //GETTERS
     public Map<Action, Integer> getActionRecency() {
         return actionRecency;
+    }
+    private Character getRandomCharacter() {
+        return characters.get(new Random().nextInt(characters.size()));
+    }
+    private Character getMaxValueCharacter() {
+        Character mostValue = characters.get(0);
+        for (Character c : characters) {
+            if (c.getValue() > mostValue.getValue()) {
+                mostValue = c;
+            }
+        }
+        return mostValue;
     }
 }

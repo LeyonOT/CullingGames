@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -25,7 +26,6 @@ public class Action {
             System.out.println();
             System.out.println(replaceVal(description, character));
             applyEffects(character);
-            System.out.println();
         } else { //nie powinno si enigdy pojawic
             System.out.println(character.getName() + " can't perform this action due to lack of required item.");
         }

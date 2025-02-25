@@ -79,5 +79,5 @@ ROCK_THROW_2 "$char$ throws $pronoun2$ Rock at a nearby bunny, but misses." 6 RO
 
 BOW_SHOOT_1 "$char$ shoots from $pronoun2$ Bow, aiming at a nearby squirrel, killing it instantly" 12 BOW FOOD false false
 BOW_SHOOT_2 "$char$ shoots from $pronoun2$ Bow, aiming at a nearby bunny, killing it instantly" 12 BOW FOOD false false
-BOW_SHOOT_3 "$char$ shoots from $pronoun2$ Bow, aiming at a nearby squirrel, but misses" 12 BOW FOOD false false
+BOW_SHOOT_3 "$char$ shoots from $pronoun2$ Bow, aiming at a nearby squirrel, but misses" 12 BOW null false false
 BOW_SHOOT_4 "$char$ shoots from $pronoun2$ Bow, aiming at a nearby deer, killing it instantly" 12 BOW FOOD false false
