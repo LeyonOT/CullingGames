@@ -22,7 +22,9 @@ public class LongActions {
     }).withLoseEffects(character -> {
         character.reduceSaturation(18);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getPron(false) + " catches on a sharp branch while trying to get over the log and wounds "+character.getPron(true)+" leg.");
+        String s = character.getPron(false);
+        s = s.toUpperCase().charAt(0) + s.substring(1);
+        System.out.println(s + " catches on a sharp branch while trying to get over the log and wounds "+character.getPron(true)+" leg.");
         character.reduceSaturation(23);
         character.takeWound();
     }).build();
@@ -41,7 +43,9 @@ public class LongActions {
     }).withLoseEffects(character -> {
         character.reduceSaturation(21);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getPron(false) + " gets caught in a strong current and is swept away.");
+        String s = character.getPron(false);
+        s = s.toUpperCase().charAt(0) + s.substring(1);
+        System.out.println(s + " gets caught in a strong current and is swept away.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(43);
     }).build();
@@ -82,7 +86,9 @@ public class LongActions {
     }).withLoseEffects(character -> {
         character.reduceSaturation(15);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getPron(false) + " falls from the tree and breaks "+character.getPron(true)+" arm.");
+        String s = character.getPron(false);
+        s = s.toUpperCase().charAt(0) + s.substring(1);
+        System.out.println(s + " falls from the tree and breaks "+character.getPron(true)+" arm.");
         character.reduceSaturation(15);
         character.takeWound();
     }).build();
@@ -117,7 +123,9 @@ public class LongActions {
     }).withLoseEffects(character -> {
         character.reduceSaturation(5);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getPron(false) + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
+        String s = character.getPron(false);
+        s = s.toUpperCase().charAt(0) + s.substring(1);
+        System.out.println(s + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(0);
     }).build();
@@ -159,7 +167,9 @@ public class LongActions {
         character.reduceSaturation(5);
     }).withCriticalLoss(character -> {
         character.removeItem(Item.MAP);
-        System.out.println(character.getPron(false) + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
+        String s = character.getPron(false);
+        s = s.toUpperCase().charAt(0) + s.substring(1);
+        System.out.println(s + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(0);
     }).build();
@@ -194,7 +204,9 @@ public class LongActions {
     }).withLoseEffects(character -> {
         character.reduceSaturation(5);
     }).withCriticalLoss(character -> {
-        System.out.println(character.getPron(false) + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
+        String s = character.getPron(false);
+        s = s.toUpperCase().charAt(0) + s.substring(1);
+        System.out.println(s + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(0);
     }).build();
@@ -245,7 +257,9 @@ public class LongActions {
         character.reduceSaturation(31);
         character.takeWound();
     }).withCriticalLoss(character -> {
-        System.out.println(character.getPron(false) + "gets mauled to death by the Bear before "+character.getPron(false)+" can even react.");
+        String s = character.getPron(false);
+        s = s.toUpperCase().charAt(0) + s.substring(1);
+        System.out.println(s + "gets mauled to death by the Bear before "+character.getPron(false)+" can even react.");
         character.takeWound();
         character.takeWound();
     }).build();
