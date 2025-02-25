@@ -1,12 +1,16 @@
 import com.formdev.flatlaf.FlatDarkLaf;
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.List;
 
 public class GameGUI extends JFrame {
-    private JTextArea outputArea;
+    private JTextPane outputPane;
     private JTextField inputField;
     private JButton sendButton;
     private JButton continueButton;
@@ -22,13 +26,18 @@ public class GameGUI extends JFrame {
         setLocationRelativeTo(null);
 
         // Tutaj wyświetla się to co się dzieje
-        outputArea = new JTextArea();
-        outputArea.setEditable(false);
+        outputPane = new JTextPane();
+        outputPane.setEditable(false);
 
-        Font font = new Font("Helvetica", Font.PLAIN, 25);
-        outputArea.setFont(font);
+        StyledDocument doc = outputPane.getStyledDocument();
+        SimpleAttributeSet centerAttr = new SimpleAttributeSet();
+        StyleConstants.setAlignment(centerAttr, StyleConstants.ALIGN_CENTER);
+        doc.setParagraphAttributes(0, doc.getLength(), centerAttr, false);
 
-        JScrollPane scrollPane = new JScrollPane(outputArea);
+        Font font = new Font("Helvetica", Font.PLAIN, 17);
+        outputPane.setFont(font);
+
+        JScrollPane scrollPane = new JScrollPane(outputPane);
         add(scrollPane, BorderLayout.CENTER);
 
         // z tąd idzie na konsole
@@ -81,8 +90,16 @@ public class GameGUI extends JFrame {
     }
 
     private void typeText(String text) {
-        outputArea.append(text + "\n");
-        outputArea.setCaretPosition(outputArea.getDocument().getLength());
+        StyledDocument doc = outputPane.getStyledDocument();
+        SimpleAttributeSet centerAttr = new SimpleAttributeSet();
+        StyleConstants.setAlignment(centerAttr, StyleConstants.ALIGN_CENTER);
+        try {
+            doc.insertString(doc.getLength(), text + "\n", centerAttr);
+            doc.setParagraphAttributes(doc.getLength() - (text.length() + 1), text.length() + 1, centerAttr, false);
+            outputPane.setCaretPosition(doc.getLength());
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
     }
 
     // nie użyty ale nie usuwaj może się przyda potem
@@ -91,8 +108,8 @@ public class GameGUI extends JFrame {
     }
 
     // Getter żeby można było zmieniać źródło dla outputarea
-    public JTextArea getOutputArea() {
-        return outputArea;
+    public JTextPane getOutputPane() {
+        return outputPane;
     }
 
     public static void main(String[] args) {
@@ -125,7 +142,7 @@ public class GameGUI extends JFrame {
                 }
 
                 // dzięki temu output idzie na konsole I do GUI
-                PrintStream guiOut = new PrintStream(new TextAreaOutputStream(gui.getOutputArea(), System.out));
+                PrintStream guiOut = new PrintStream(new TextPaneOutputStream(gui.getOutputPane(), System.out));
                 System.setOut(guiOut);
                 System.setErr(guiOut);
             });
@@ -155,21 +172,31 @@ public class GameGUI extends JFrame {
 }
 
 // ten output stream po prosyu pisze na dwie rzeczy (nasze GUI + orginaln ą konsolę)
-class TextAreaOutputStream extends OutputStream {
-    private JTextArea textArea;
+class TextPaneOutputStream extends OutputStream {
+    private JTextPane textPane;
     private OutputStream console;
+    private SimpleAttributeSet centerAttr;
 
-    public TextAreaOutputStream(JTextArea textArea, OutputStream console) {
-        this.textArea = textArea;
+    public TextPaneOutputStream(JTextPane textPane, OutputStream console) {
+        this.textPane = textPane;
         this.console = console;
+        centerAttr = new SimpleAttributeSet();
+        StyleConstants.setAlignment(centerAttr, StyleConstants.ALIGN_CENTER);
     }
 
     // fundamentalna metoda outputstream, nic nie zmieniamy tylko dodajemy wypisywanie do GUI i autoscroll na dół
     @Override
     public void write(int b) throws IOException {
         console.write(b);
-        textArea.append(String.valueOf((char) b));
-        textArea.setCaretPosition(textArea.getDocument().getLength());
+        String s = String.valueOf((char) b);
+        try {
+            StyledDocument doc = textPane.getStyledDocument();
+            doc.insertString(doc.getLength(), s, centerAttr);
+            doc.setParagraphAttributes(doc.getLength() - s.length(), s.length(), centerAttr, false);
+        } catch (BadLocationException e) {
+            throw new IOException(e);
+        }
+        SwingUtilities.invokeLater(() -> textPane.setCaretPosition(textPane.getDocument().getLength()));
     }
 
     // to samo tylko dla tablic byteów
@@ -177,8 +204,14 @@ class TextAreaOutputStream extends OutputStream {
     public void write(byte[] b, int off, int len) throws IOException {
         console.write(b, off, len);
         String text = new String(b, off, len);
-        textArea.append(text);
-        textArea.setCaretPosition(textArea.getDocument().getLength());
+        try {
+            StyledDocument doc = textPane.getStyledDocument();
+            doc.insertString(doc.getLength(), text, centerAttr);
+            doc.setParagraphAttributes(doc.getLength() - text.length(), text.length(), centerAttr, false);
+        } catch (BadLocationException e) {
+            throw new IOException(e);
+        }
+        SwingUtilities.invokeLater(() -> textPane.setCaretPosition(textPane.getDocument().getLength()));
     }
 
     @Override
