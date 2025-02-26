@@ -3,8 +3,8 @@ import java.util.Random;
 public enum Personality {
     AGGRESSIVE(1),  //FIGHTS
     PEACEFUL(1),    //FIGHTS
-    PARANOID(2),    //ACTIONS
-    CONFIDENT(2),   //ACTIONS
+    TRUSTWORTHY(2),    //TEAM ACTIONS
+    TREACHEROUS(2),   //TEAM ACTIONS
     SOCIABLE(3),    //TEAMS
     RECLUSIVE(3),    //TEAMS
     RESOURCEFUL(4), //TODO

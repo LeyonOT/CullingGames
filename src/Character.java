@@ -8,12 +8,11 @@ public class Character {
     private int saturation;
     private boolean tired;
     private boolean wounded;
-    private List<Item> equipment;
+    private List<Item> equipment, tempEquipment;
     private int value;
     private Team team;
     private boolean teamActionParticipation;
     private boolean alive;
-
     private final int maxSlots;
     private int usedSlots;
 
@@ -26,6 +25,7 @@ public class Character {
         this.tired = false;
         this.wounded = false;
         this.equipment = new ArrayList<>();
+        this.tempEquipment = new ArrayList<>();
         this.team = null;
         this.teamActionParticipation = false;
         this.alive = true;
@@ -39,6 +39,7 @@ public class Character {
     } //tylko uzywane w nocy
 
     public void reduceSaturation(int saturationCost) {
+        if (!alive) return;
         saturation -= saturationCost;
         if (saturation < 40)
             tired = true;
@@ -68,6 +69,7 @@ public class Character {
 
     private void die(){
         alive = false;
+        if (team != null) team.manageTeam();
     }
 
     public void healWound() {
@@ -89,7 +91,7 @@ public class Character {
             usedSlots += newItem.getSlotSize();
             System.out.println(name + " added " + newItem.getName() + " to "+getPron(true)+" equipment.");
             wasAdded = true;
-        } else {
+        } else if (team == null || newItem.getPriority() >= 4) {
             sortEquipmentByPriority();
             ArrayList<Item> indexesToRemove = new ArrayList<>();
             int sizeCounter = 0;
@@ -133,7 +135,8 @@ public class Character {
         sortEquipmentByPriority();
         updateValue();
         if (!wasAdded) {
-            System.out.println(name + " could not add " + newItem.getName() + " to "+getPron(true)+" equipment.");
+            if (inTeam()) team.addItem(newItem);
+            else System.out.println(name + " could not add " + newItem.getName() + " to "+getPron(true)+" equipment.");
         }
     }
 
@@ -160,6 +163,10 @@ public class Character {
             System.out.println(name + " removed " + item.getName() + " from "+getPron(true)+" equipment.");
             updateValue();
             return true;
+        } else if (tempEquipment.contains(item)){
+            tempEquipment.remove(item);
+            System.out.println(name + " removed " + item.getName() + " from "+getPron(true)+" equipment.");
+            return true;
         } else {
             System.out.println(name + " does not have " + item.getName() + " in "+getPron(true)+" equipment.");
             return false;
@@ -167,7 +174,15 @@ public class Character {
     }
 
     public boolean hasItem(Item item) {
-        return equipment.contains(item);
+        if (equipment.contains(item) || tempEquipment.contains(item)) {
+            return true;
+        } else if (team != null && team.hasItem(item)) {
+            tempEquipment.add(item);
+            team.addEqTransaction(this, item);
+            System.out.println(name + " took " + item.getName() + " from " + getPron(true) + " Team's shared equipment.");
+            return true;
+        }
+        return false;
     }
 
     public String showEquipment() {
@@ -177,6 +192,10 @@ public class Character {
         }
         s.append("Used Slots: " + usedSlots + "/" + maxSlots);
         return s.toString();
+    }
+
+    public void clearTempEquipment() {
+        tempEquipment.clear();
     }
 
     private void updateValue() {
@@ -223,6 +242,9 @@ public class Character {
     }
     public int getValue() {
         return value;
+    }
+    public List<Item> getTempEquipment() {
+        return tempEquipment;
     }
     public boolean hasPersonality(Personality p) {
         for (Personality i : personality) {

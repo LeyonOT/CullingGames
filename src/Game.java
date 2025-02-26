@@ -50,8 +50,10 @@ public class Game {
 
                 characters.add(new Character("Stasiek", "Male", Trait.CHARISMATIC));
                 characters.add(new Character("Kuba", "Male", Trait.CHARISMATIC));
-                characters.add(new Character("Januszkiewicz", "Female", Trait.LUCKY));
-                characters.add(new Character("Hillary Clinton", "Feale", Trait.SMART));
+                characters.add(new Character("Zosia", "Female", Trait.LUCKY));
+                characters.add(new Character("Hillary Clinton", "Female", Trait.SMART));
+
+                characters.add(new Character("Michał Sołtysiak", "Male", Trait.SMART));
 
                 System.out.println("All characters have been set up. The game is ready to begin!");
                 return;
@@ -123,12 +125,12 @@ public class Game {
     public void runGame() {
         while (characters.size() > 1) {
             dayCount++;
-            System.out.println("\n------------------------ Day " + dayCount + " ------------------------");
+            System.out.println("\n------------------------ Day " + dayCount + " ------------------------\n");
             performTeamAction();
             playDayCycle();
-            manageTeams();
             removeDeadCharacters();
-            System.out.println("\n--------------------------------------------------------");
+            manageTeams();
+            System.out.println("--------------------------------------------------------");
             while (true) {
                 System.out.print("Enter command ('c' or enter to continue, 'h' for help): ");
 
@@ -157,6 +159,8 @@ public class Game {
                             }
                             if (!t.getMembers().isEmpty())
                                 System.out.println(t.getMembers().get(t.getMembers().size()-1).getName() + ".");
+                            System.out.print(t.getSharedEquipment());
+                            System.out.println(" | " + t.getUsedSlots()+"/"+t.getMaxSlots());
                         }
                         if (teams.isEmpty())
                             System.out.println("No teams are currently formed.");
@@ -226,7 +230,7 @@ public class Game {
             if (character.isAlive()) {
                 if (character.getSaturation() < 30 && character.hasItem(Item.FOOD)) {
                     eatFood(character, random);
-                } else if (character.isWounded() && character.hasItem(Item.ROPE) && random.nextDouble() < 0.3) {
+                } else if (character.isWounded() && random.nextDouble() < 0.3 && character.hasItem(Item.ROPE)) {
                     stabilizeWound(character);
                 } else if (!character.getTAP()){
                     assignRandomAction(character);
@@ -253,12 +257,13 @@ public class Game {
     public void performTeamAction() {
         Character maxValueCharacter = getMaxValueCharacter();
         formTeams(maxValueCharacter);
+        System.out.println();
         for (Character c : characters) {
             boolean isSociable = c.hasPersonality(Personality.SOCIABLE);
             boolean isReclusive = c.hasPersonality(Personality.RECLUSIVE);
             boolean isMaxValue = c.equals(maxValueCharacter);
             double modifier = (isSociable ? 0.1 : 0) - (isMaxValue ? 0.1 : 0) - (isReclusive ? 0.1 : 0);
-            if (c.inTeam()) c.setTAP(new Random().nextDouble() < 0.7 + modifier);
+            if (c.inTeam()) c.setTAP(new Random().nextDouble() < 0.35 + modifier);
         }
 
         for (Team t : teams){
@@ -303,7 +308,7 @@ public class Game {
             double modifier = (isCharismatic ? 0.06 : 0) + (isSociable ? 0.02 : 0) + (isMaxValue ? 0.05 : 0) - (isReclusive ? 0.08 : 0);
             //Form a Team
             for (Character c2: temp) {
-                if (c2.inTeam() || c.equals(c2)) continue;
+                if (c2.inTeam() || c.equals(c2) || characters.size()==2) continue;
                 double chanceToJoin = 0.015;
                 double modifier2 = (c2.hasPersonality(Personality.SOCIABLE) ? 0.02 : 0) -
                         (c.hasPersonality(Personality.RECLUSIVE) ? 0.012 : 0);
@@ -319,7 +324,7 @@ public class Game {
             Collections.shuffle(teams, random);
             if (!teams.isEmpty()){
                 for (Team t : teams) {
-                    if (t.getMembers().size() > characters.size()/2) continue;
+                    if ((t.getMembers().size() > characters.size()/2) || t.getBannedMembers().contains(c)) continue;
                     double baseChance = 0.02 * characters.size()/2/t.getMembers().size();
                     double r = new Random().nextDouble();
                     //System.out.println(r + " " + (baseChance + modifier));
@@ -334,7 +339,21 @@ public class Game {
 
     public void manageTeams() {
         List<Team> removeTeams = new ArrayList<>();
+        Character maxValueCharacter = getMaxValueCharacter();
         for (Team t: teams) {
+            if ((t.getMembers().size()-1 > characters.size()/2) ||
+                    (characters.size()==2 && t.getMembers().size()==2)){
+                if (t.getMembers().contains(maxValueCharacter))
+                    t.removeMember(maxValueCharacter, true);
+                else
+                    t.removeMember(t.getMaxValueMember(), true);
+
+                if (!t.manageTeam()) removeTeams.add(t);
+                t.manageEq();
+                continue;
+            }
+            t.handleBetrayal();
+            t.manageEq();
             if (!t.manageTeam()) removeTeams.add(t);
         }
         for (Team t:removeTeams) {
@@ -359,19 +378,19 @@ public class Game {
 
     //SPECIAL ACTIONS
     private void stabilizeWound(Character character) {
-        System.out.println();
         System.out.println(character.getName() + " uses a Rope to stabilize "+character.getPron(true)+" wound.");
         character.healWound();
         character.removeItem(Item.ROPE);
         character.reduceSaturation(10);
+        System.out.println();
     }
 
     private void eatFood(Character character, Random random) {
         int saturationRestored = random.nextInt(16) + 20;
-        System.out.println();
         System.out.println(character.getName() + " takes a break to eat some Food");
-        character.reduceSaturation(-saturationRestored);
         character.removeItem(Item.FOOD);
+        character.reduceSaturation(-saturationRestored);
+        System.out.println();
     }
 
     //GETTERS

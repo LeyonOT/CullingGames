@@ -23,20 +23,20 @@ public class Action {
     }
     public void perform(Character character) {
         if (isAccessible(character)) {
-            System.out.println();
             String s = replaceVal(description, character);
             s = s.toUpperCase().charAt(0) + s.substring(1);
             System.out.println(s);
             applyEffects(character);
+            System.out.println();
         } else { //nie powinno si enigdy pojawic
             System.out.println(character.getName() + " can't perform this action due to lack of required item.");
         }
     }
     protected void applyEffects(Character character) {
-        character.reduceSaturation(saturationCost);
         if (consumedItem) character.removeItem(requiredItem);
         if (rewardItem != null) character.addItem(rewardItem);
         if (applyWound) character.takeWound();
+        character.reduceSaturation(saturationCost);
     }
 
     protected String replaceVal(String s, Character c) {
@@ -144,20 +144,20 @@ class LongAction extends Action {
         }
 
         int roll = new Random().nextInt(13);
-        int modifier = calculateModifier(character);
-        int result = roll + modifier;
 
-        System.out.println();
         String s = replaceVal(description, character);
         s = s.toUpperCase().charAt(0) + s.substring(1);
         System.out.print(s);
-        System.out.println(" | (R: " + roll + ", T: " + result + ", D: " + baseDifficulty + ")");
+        System.out.println(" | (R: " + roll + ", D: " + baseDifficulty + ")");
 
         if (roll == 0) {
             System.out.println("Critical failure!");
             criticalLoss.apply(character);
             return;
         }
+
+        int modifier = calculateModifier(character);
+        int result = roll + modifier;
 
         if (result >= baseDifficulty) {
             s = replaceVal(winDesc, character);
@@ -170,6 +170,7 @@ class LongAction extends Action {
             System.out.println(s);
             loseEffectApplier.apply(character);
         }
+        System.out.println();
     }
 
     public void addTraitModifier(Trait trait, int modifier) {

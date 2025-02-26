@@ -25,8 +25,9 @@ public class LongActions {
         String s = character.getPron(false);
         s = s.toUpperCase().charAt(0) + s.substring(1);
         System.out.println(s + " catches on a sharp branch while trying to get over the log and wounds "+character.getPron(true)+" leg.");
-        character.reduceSaturation(23);
         character.takeWound();
+        character.reduceSaturation(23);
+        System.out.println();
     }).build();
 
     public static final LongAction RIVER_CROSSING = new LongAction.Builder(
@@ -48,6 +49,7 @@ public class LongActions {
         System.out.println(s + " gets caught in a strong current and is swept away.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(43);
+        System.out.println();
     }).build();
 
     public static final LongAction FRUIT_TREE_CLIMB = new LongAction.Builder(
@@ -62,24 +64,26 @@ public class LongActions {
         action.addItemModifier(Item.LADDER, 4);
     }).withWinEffects(character -> {
         int satReduction = 0;
-        if (character.hasItem(Item.LADDER)) {
+        boolean hasLadder = character.hasItem(Item.LADDER);
+        boolean hasRope = character.hasItem(Item.ROPE);
+        if (hasLadder) {
             satReduction = 15;
             System.out.print(" using a Ladder");
         }
-        else if (character.hasItem(Item.ROPE)) {
+        else if (hasRope) {
             satReduction = 10;
             System.out.print(" using a Rope");
         }
         System.out.print(" and finds");
         if (character.getTrait() == Trait.LUCKY) {
             System.out.println(" two ripe fruits.");
-            if (character.hasItem(Item.ROPE)) character.removeItem(Item.ROPE);
+            if (!hasLadder && hasRope) character.removeItem(Item.ROPE);
             character.addItem(Item.FOOD);
             character.reduceSaturation(-10);
         }
         else {
             System.out.println(" a ripe fruit.");
-            if (character.hasItem(Item.ROPE)) character.removeItem(Item.ROPE);
+            if (!hasLadder && hasRope) character.removeItem(Item.ROPE);
             character.addItem(Item.FOOD);
             character.reduceSaturation(15-satReduction);
         }
@@ -89,8 +93,9 @@ public class LongActions {
         String s = character.getPron(false);
         s = s.toUpperCase().charAt(0) + s.substring(1);
         System.out.println(s + " falls from the tree and breaks "+character.getPron(true)+" arm.");
-        character.reduceSaturation(15);
         character.takeWound();
+        character.reduceSaturation(15);
+        System.out.println();
     }).build();
 
     public static final LongAction FIND_TREASURE_1 = new LongAction.Builder(
@@ -128,6 +133,7 @@ public class LongActions {
         System.out.println(s + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(0);
+        System.out.println();
     }).build();
 
     public static final LongAction FIND_TREASURE_2 = new LongAction.Builder(
@@ -172,6 +178,7 @@ public class LongActions {
         System.out.println(s + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(0);
+        System.out.println();
     }).build();
 
     public static final LongAction FIND_TREASURE_3 = new LongAction.Builder(
@@ -209,6 +216,7 @@ public class LongActions {
         System.out.println(s + " puts one of "+character.getPron(true)+" items in it and forgets to take it back.");
         character.removeItem(Item.RANDOM);
         character.reduceSaturation(0);
+        System.out.println();
     }).build();
 
     public static final LongAction BEAR_ATTACK = new LongAction.Builder(
@@ -230,7 +238,7 @@ public class LongActions {
         action.addItemModifier(Item.TORCH, 1);
     }).withWinEffects(character -> {
         Map<Item, String> winDescriptions = new HashMap<>();
-        winDescriptions.put(Item.GUN, " shoot the bear with a Gun");
+        winDescriptions.put(Item.GUN, " shooting the bear with a Gun");
         winDescriptions.put(Item.SWORD, " slaying the bear with a Sword");
         winDescriptions.put(Item.AXE, " fighting off the bear with an Axe");
 
@@ -254,14 +262,15 @@ public class LongActions {
         character.addItem(Item.FOOD);
         character.reduceSaturation(18);
     }).withLoseEffects(character -> {
-        character.reduceSaturation(31);
         character.takeWound();
+        character.reduceSaturation(31);
     }).withCriticalLoss(character -> {
         String s = character.getPron(false);
         s = s.toUpperCase().charAt(0) + s.substring(1);
-        System.out.println(s + "gets mauled to death by the Bear before "+character.getPron(false)+" can even react.");
+        System.out.println(s + " gets mauled to death by the bear before "+character.getPron(false)+" can even react.");
         character.takeWound();
         character.takeWound();
+        System.out.println();
     }).build();
 
 
