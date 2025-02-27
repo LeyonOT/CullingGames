@@ -1,20 +1,14 @@
 import java.util.*;
 
 public class Character {
-    private String name;
-    private String gender;
+    private final String name, gender;
     private Trait trait;
     private Personality[] personality;
-    private int saturation;
-    private boolean tired;
-    private boolean wounded;
+    private int saturation, value, usedSlots;
+    private boolean tired, wounded, teamActionParticipation, alive, actionLock;
     private List<Item> equipment, tempEquipment;
-    private int value;
     private Team team;
-    private boolean teamActionParticipation;
-    private boolean alive;
     private final int maxSlots;
-    private int usedSlots;
 
     public Character(String name, String gender, Trait trait) {
         this.name = name;
@@ -30,6 +24,7 @@ public class Character {
         this.teamActionParticipation = false;
         this.alive = true;
         this.value = 0;
+        this.actionLock = false;
 
         this.maxSlots = trait == Trait.STRONG ? 5 : 4;
         this.usedSlots = 0;
@@ -46,7 +41,7 @@ public class Character {
         else
             tired = false;
         //System.out.println(name + (saturationCost>=0?" loses ":" gains ") + (saturationCost>=0?saturationCost:-saturationCost) + " saturation.");
-        System.out.println("(" + (saturationCost>=0?"-":"+") + (saturationCost>=0?saturationCost:-saturationCost) + ") saturation.");
+        if (!actionLock) System.out.println("(" + (saturationCost>=0?"-":"+") + (saturationCost>=0?saturationCost:-saturationCost) + ") saturation.");
         if (this.saturation <=0) {
             die();
             System.out.println(name + " has died of starvation.");
@@ -165,21 +160,25 @@ public class Character {
             return true;
         } else if (tempEquipment.contains(item)){
             tempEquipment.remove(item);
+            if (team != null) team.removeItem(item, false);
             System.out.println(name + " removed " + item.getName() + " from "+getPron(true)+" equipment.");
             return true;
         } else {
-            System.out.println(name + " does not have " + item.getName() + " in "+getPron(true)+" equipment.");
+            //System.out.println(name + " does not have " + item.getName() + " in "+getPron(true)+" equipment.");
             return false;
         }
     }
 
+    public void setActionLock(boolean actionLock) {
+        this.actionLock = actionLock;
+    }
     public boolean hasItem(Item item) {
         if (equipment.contains(item) || tempEquipment.contains(item)) {
             return true;
         } else if (team != null && team.hasItem(item)) {
             tempEquipment.add(item);
             team.addEqTransaction(this, item);
-            System.out.println(name + " took " + item.getName() + " from " + getPron(true) + " Team's shared equipment.");
+            if (!actionLock) System.out.println(name + " took " + item.getName() + " from " + getPron(true) + " Team's shared equipment.");
             return true;
         }
         return false;

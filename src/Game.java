@@ -346,7 +346,7 @@ public class Game {
                 if (t.getMembers().contains(maxValueCharacter))
                     t.removeMember(maxValueCharacter, true);
                 else
-                    t.removeMember(t.getMaxValueMember(), true);
+                    t.removeMember(t.getValueMember(true, false), true);
 
                 if (!t.manageTeam()) removeTeams.add(t);
                 t.manageEq();

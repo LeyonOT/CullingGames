@@ -9,6 +9,9 @@ public class Action {
     protected Item requiredItem,rewardItem;
     protected boolean consumedItem, applyWound;
 
+    public Action(){
+    }
+
     public Action(String description, int saturationCost, Item requiredItem, Item rewardItem, boolean consumedItem, boolean applyWound) {
         this.description = description;
         this.saturationCost = saturationCost;

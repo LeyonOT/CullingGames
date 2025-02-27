@@ -55,12 +55,6 @@ public class Team {
         if (members.size() == 1) removeMember(members.get(0), false);
 
         for (Map.Entry<Character, List<Item>> transaction : eqTransactionList.entrySet()) {
-            for (Item item:transaction.getValue()) {
-                if (transaction.getKey().getTempEquipment().contains(item)) continue;
-                sharedEquipment.remove(item);
-                //System.out.println("Removed from Team Equipment: " + item);
-                usedSlots -= item.getSlotSize();
-            }
             transaction.getKey().clearTempEquipment();
         }
         eqTransactionList.clear();
@@ -228,7 +222,7 @@ public class Team {
                 if (stolenItem != null) {
                     System.out.println(" stole " + stolenItem + "!");
                     betrayer.addItem(stolenItem);
-                } else System.out.println(" run away!");
+                } else System.out.println(" ran away!");
         }
         else {
             removeMember(betrayer, false);
@@ -247,12 +241,15 @@ public class Team {
     public List<Character> getBannedMembers() {
         return bannedMembers;
     }
-    public Character getMaxValueMember() {
-        Character mostValue = members.get(0);
-        for (Character c : members) {
+    public Character getValueMember(boolean max, boolean action) {
+        List<Character> charList = action?getActionMembers():members;
+        Character mostValue = charList.get(0);
+        Character leastValue = charList.get(0);
+        for (Character c : charList) {
             if (c.getValue() > mostValue.getValue()) mostValue = c;
+            if (c.getValue() < leastValue.getValue()) leastValue = c;
         }
-        return mostValue;
+        return max?mostValue:leastValue;
     }
     public List<Character> getActionMembers() {
         List<Character> memberList = new ArrayList<>();
