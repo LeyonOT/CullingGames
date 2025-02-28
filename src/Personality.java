@@ -5,11 +5,12 @@ public enum Personality {
     PEACEFUL(1),    //FIGHTS
     TRUSTWORTHY(2),    //TEAM ACTIONS
     TREACHEROUS(2),   //TEAM ACTIONS
-    SOCIABLE(3),    //TEAMS
+    SOCIABLE(3),     //TEAMS
     RECLUSIVE(3),    //TEAMS
-    RESOURCEFUL(4), //TODO
-    IMPULSIVE(4),   //TODO
-    ANALYTICAL(5);  //TODO
+    RESOURCEFUL(4),  //TODO
+    IMPULSIVE(4),    //TODO
+    BRAVE(5),        //TEAM ACTIONS
+    CAUTIOUS(5);     //TEAM ACTIONS
     private final int group;
     Personality(int group) {
         this.group=group;

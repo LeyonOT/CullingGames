@@ -36,7 +36,7 @@ public class Item {
             return randomItem(Integer.parseInt(name.substring(6)));
         }
         for (Item item : listOfItems) {
-            if (item.getName().equalsIgnoreCase(name)) {
+            if (item.getName().replaceAll("_", " ").equalsIgnoreCase(name)) {
                 return item;
             }
         }
@@ -45,97 +45,49 @@ public class Item {
 
     //Declarations
     public static Item RANDOM = new Item("Random", 0, 0); //RANDOM FOR CHARACTER EQUIPMENT
-    public static Item TORCH = new Item("Torch", 1, 1);
-
-    static {
-        listOfItems.add(TORCH);
-    }
-
-    //Implementation TODO
-    public static Item COMPASS = new Item("Compass", 1, 1);
-
-    static {
-        listOfItems.add(COMPASS);
-    }
-
-    //Implementation TODO
-    public static Item SLEEPING_BAG = new Item("Sleeping Bag", 2, 1);
-
-    static {
-        listOfItems.add(SLEEPING_BAG);
-    }
-
-    public static Item LADDER = new Item("Ladder", 2, 3);
-
-    static {
-        listOfItems.add(LADDER);
-    }
-
-    public static Item ROPE = new Item("Rope", 1, 2);
-
-    static {
-        listOfItems.add(ROPE);
-    }
-
-    public static Item MAP = new Item("Map", 1, 4);
-
-    static {
-        listOfItems.add(MAP);
-    }
 
     public static Item ROCK = new Item("Rock", 1, 0);
+    static {listOfItems.add(ROCK);}
+    public static Item TORCH = new Item("Torch", 1, 1);
+    static {listOfItems.add(TORCH);}
+    public static Item HERBS = new Item("Herbs", 1, 1);
+    static {listOfItems.add(HERBS);}
+    public static Item BANDAGES = new Item("Bandages", 1, 1);
+    static { listOfItems.add(BANDAGES); }
+    //Implementation TODO
+    public static Item COMPASS = new Item("Compass", 1, 1);
+    static {listOfItems.add(COMPASS);}
+    //Implementation TODO
+    public static Item SLEEPING_BAG = new Item("Sleeping Bag", 2, 1);
+    static {listOfItems.add(SLEEPING_BAG);}
 
-    static {
-        listOfItems.add(ROCK);
-    }
-
-    public static Item SWORD = new Item("Sword", 1, 4);
-
-    static {
-        listOfItems.add(SWORD);
-    }
-
-    public static Item AXE = new Item("Axe", 2, 3);
-
-    static {
-        listOfItems.add(AXE);
-    }
-
+    public static Item ROPE = new Item("Rope", 1, 2);
+    static {listOfItems.add(ROPE);}
     public static Item HAMMER = new Item("Hammer", 1, 2);
-
-    static {
-        listOfItems.add(HAMMER);
-    }
+    static {listOfItems.add(HAMMER);}
 
     public static Item HELMET = new Item("Helmet", 1, 3);
+    static {listOfItems.add(HELMET);}
+    public static Item AXE = new Item("Axe", 1, 3);
+    static {listOfItems.add(AXE);}
+    public static Item BOW = new Item("Bow", 1, 3);
+    static {listOfItems.add(BOW);}
+    public static Item LADDER = new Item("Ladder", 2, 3);
+    static {listOfItems.add(LADDER);}
+    public static Item FISHING_ROD = new Item("Fishing Rod", 2, 3);
+    static {listOfItems.add(FISHING_ROD);}
 
-    static {
-        listOfItems.add(HELMET);
-    }
-
+    public static Item MAP = new Item("Map", 1, 4);
+    static {listOfItems.add(MAP);}
+    public static Item SWORD = new Item("Sword", 1, 4);
+    static {listOfItems.add(SWORD);}
+    public static Item FOOD = new Item("Food", 1, 4);  //GENERAL FOOD ITEM
+    static {listOfItems.add(FOOD);}
     public static Item SHIELD = new Item("Shield", 2, 4);
-
-    static {
-        listOfItems.add(SHIELD);
-    }
+    static {listOfItems.add(SHIELD);}
 
     public static Item GUN = new Item("Gun", 1, 5);
-
-    static {
-        listOfItems.add(GUN);
-    }
-
-    public static Item BOW = new Item("Bow", 2, 3);
-
-    static {
-        listOfItems.add(BOW);
-    }
-
-    public static Item FOOD = new Item("Food", 1, 4);
-
-    static {
-        listOfItems.add(FOOD);
-    }
+    static {listOfItems.add(GUN);}
 
 
     //RANDOM FOR RANDOM ITEM FROM THE LIST OF SAID PRIORITY

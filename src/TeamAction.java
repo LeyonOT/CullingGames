@@ -62,33 +62,34 @@ public class TeamAction extends Action {
         return team.getActionMembers().size() >= minMembers;
     }
 
+
     public void perform(Team team) {
         if (isAccessible(team)) {
             List<Character> actionMembers = team.getActionMembers();
             int base =  actionMembers.size();
             int modifier = 0;
+            List<Integer> highestItemCheckList = new ArrayList<>();
             for (Character c : actionMembers) {
-                modifier += c.getGender().equals("Male")?genderMods[0]:genderMods[1];
-                for (Trait t:traitMods) {
-                    if (c.getTrait().equals(t)){
+                modifier += c.getGender().equals("Male") ? genderMods[0] : genderMods[1];
+                for (Trait t : traitMods) {
+                    if (c.getTrait().equals(t)) {
                         modifier++;
                         break;
                     }
                 }
-                for (Personality p:personalityPlusMods) {
-                    modifier += c.hasPersonality(p)?1:0;
+                for (Personality p : personalityPlusMods) {
+                    modifier += c.hasPersonality(p) ? 1 : 0;
                 }
-                for (Personality p:personalityMinusMods) {
-                    modifier -= c.hasPersonality(p)?1:0;
+                for (Personality p : personalityMinusMods) {
+                    modifier -= c.hasPersonality(p) ? 1 : 0;
                 }
-                for (AbstractMap.SimpleEntry<Item, Integer> se:itemMods) {
+                for (AbstractMap.SimpleEntry<Item, Integer> se : itemMods) {
                     if (highestItemCheckList.contains(se.getValue())) continue;
                     if (c.hasItem(se.getKey())) {
                         modifier++;
                         highestItemCheckList.add(se.getValue());
                     }
                 }
-                highestItemCheckList.clear();
             }
 
             List<Integer> indexesOfMembers = new ArrayList<>();
@@ -124,8 +125,17 @@ public class TeamAction extends Action {
             if (itemUsed[i]){                                                //remove items if they were used
                 for (Item itx : itemsToRemove) {
                     for (int ix : indexesOfMembers) {
-                        if (actionMembers.get(i).removeItem(itx))
+                        if (actionMembers.get(ix).removeItem(itx))
                             break;
+                    }
+                }
+            }
+            if (i>0) {
+                for (AbstractMap.SimpleEntry<Item, Integer> se : itemMods) {
+                    if (se.getValue() < 0 && highestItemCheckList.contains(se.getValue())) {
+                        for (Character c : actionMembers) {
+                            c.removeItem(se.getKey());
+                        }
                     }
                 }
             }
@@ -140,11 +150,17 @@ public class TeamAction extends Action {
             for (int j = wounds[i]; j > 0 ; j--) {                          //take wounds
                 actionMembers.get(new Random().nextInt(actionMembers.size())).takeWound();
             }
-
+            if (wounds[i]<0){
+                System.out.println(getTeamNames(actionMembers) + " heal all their wounds!");
+                for (Character c:actionMembers) {
+                    c.healWound();
+                }
+            }
             actionMembers.removeIf(c -> !c.isAlive());
             for (Character c:actionMembers) {
                 c.setActionLock(true);
             }
+
             System.out.println(getTeamNames(actionMembers) + " " + (satGain[i]>=0?"gained ":"lost ") + Math.abs(satGain[i]) + " saturation.");
             for (Character c:actionMembers) {
                 c.setActionLock(false);

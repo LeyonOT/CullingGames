@@ -1,3 +1,15 @@
--- TEAM ACTIONS
+--EXPLORE CAVE
+$team$ attempt to explore a cave, but find nothing.~$team1$ find$num1$ a cave, and $team2$ decide$num2$ to explore it.~$team$ delve deep into a cave, discovering a hidden stash of items.|2|-3,-8,-13|-1,-6,15|null;null;TORCH|false,false,true|TORCH,1;ROPE,-1|LUCKY|BRAVE|CAUTIOUS|1,0|null;HERBS;FOOD,AXE,RANDOM4|0,0,0
 
-SETUP_CAMP
+--SETUP CAMP
+$team$ try to set up a small camp, but they fail.~$team1$ set$num1$ up a small camp with some help of $team2$.~$team1$ set$num1$ up a small camp, while $team2$ gather$num2$ some resources.|2|0,2,5|0,5,13|null;null;null|false,false,false|COMPASS,1;ROPE,1|SMART|RESOURCEFUL|IMPULSIVE|0,0|null;null;FOOD|0,0,0
+
+--SCOUT AREA
+$team$ attempt to scout the area, but get lost.~$team$ manage to scout a small area and find some Food.~$team1$ successfully scout$num1$ a large area and $team2$ collect$num2$ found loot.|2|-1,-5,-10|-5,-6,-8|null;null;MAP|false,false,false|COMPASS,1;MAP,2|SMART,FAST|null|null|0,1|null;FOOD;FOOD,RANDOM3|0,0,0
+
+--FISHING
+$team$ try to fish, but they aren't able to.~$team1$ prepare$num1$ the bait for $team2$ to fish with.~$team2$ prepare$num2$ some bait for fishing, while $team1$ look$num1$ for a proper location. Together, they get a bountiful catch.|2|0,2,4|-4,-6,-12|null;FISHING ROD;FISHING ROD|false,false,false|FOOD,1|SMART|CAUTIOUS|IMPULSIVE|0,0|null;FOOD;FOOD,FOOD|0,0,0
+
+--HEAL
+$team$ try to treat wounds, but they don't have enough resources, so they worsen the situation.~$team$ help each other treat their wounds and injuries.|2|0,4|-2,5|null;null|false,false|HERBS,-1;BANDAGES,-2;ROPE,-3|SMART|RESOURCEFUL,CAUTIOUS|null|0,0|null;null|1,-1
+
